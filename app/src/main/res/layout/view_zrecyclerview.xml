@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/answer" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/x1">
+
+    <com.hboxs.rouji.utils.ZRecyclerView.ZRecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.hboxs.rouji.utils.ZRecyclerView.ZRecyclerView>
+
+    <ImageView android:id="@+id/no_data"
+               android:layout_width="@dimen/x240"
+               android:layout_height="@dimen/x240"
+               android:layout_gravity="center"
+               android:visibility="gone"/>
+
+    <include layout="@layout/view_progress"/>
+
+</FrameLayout>
