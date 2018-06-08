@@ -6,15 +6,17 @@ package com.micro.microvideo.http;
 
 public class HttpResult<T>{
     private int code;
+    private int total;
+    private int pageSize;
     private T data;
-    private String errmsg;
+    private String message;
 
-    public String getErrmsg() {
-        return errmsg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrmsg(String errmsg) {
-        this.errmsg = errmsg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public int getCode() {
@@ -31,6 +33,22 @@ public class HttpResult<T>{
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     @Override

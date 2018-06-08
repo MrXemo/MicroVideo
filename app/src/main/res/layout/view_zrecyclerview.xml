@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/x1">
 
-    <com.hboxs.rouji.utils.ZRecyclerView.ZRecyclerView
+    <com.micro.microvideo.util.ZRecyclerView.ZRecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.hboxs.rouji.utils.ZRecyclerView.ZRecyclerView>
+    </com.micro.microvideo.util.ZRecyclerView.ZRecyclerView>
 
     <ImageView android:id="@+id/no_data"
                android:layout_width="@dimen/x240"

@@ -5,9 +5,9 @@
               android:layout_height="match_parent">
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                                        android:layout_width="match_parent"
-                                       android:layout_height="@dimen/x35"
+                                       android:layout_height="@dimen/x38"
                                        android:background="@color/colorPrimaryDark"
-                                       android:minHeight="@dimen/x36">
+                                       android:minHeight="@dimen/x38">
 
         <TextView
             android:id="@+id/title"
@@ -18,8 +18,10 @@
             android:ellipsize="end"
             android:layout_gravity="center"
             android:textColor="@color/color_red"
-            android:textSize="@dimen/x12"/>
+            android:textSize="@dimen/x14"/>
 
     </android.support.v7.widget.Toolbar>
+
+    <include layout="@layout/view_zrecyclerview" />
 
 </LinearLayout>

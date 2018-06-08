@@ -7,22 +7,13 @@
         android:id="@+id/fl_tab_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/x51"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/x51"
-        android:background="@color/colorGray"/>
-
+        android:layout_marginBottom="@dimen/x37"/>
 
     <com.micro.microvideo.util.footbar.BottomBar
         android:layout_gravity="bottom"
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
-        android:layout_height="@dimen/x36"
-    />
+        android:layout_height="@dimen/x42"/>
 
 </FrameLayout>

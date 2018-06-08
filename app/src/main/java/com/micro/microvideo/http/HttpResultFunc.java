@@ -14,8 +14,8 @@ public class HttpResultFunc<T> implements Function<HttpResult<T>, T> {
    @Override
     public T apply(HttpResult<T> httpResult) {
 
-        if (httpResult.getCode() != 0) {
-            throw new ApiException(httpResult.getErrmsg());
+        if (httpResult.getCode() != 200) {
+            throw new ApiException(httpResult.getMessage());
         }
         return  httpResult.getData();
     }

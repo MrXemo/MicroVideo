@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpMethods {
 //    public static final String BASE_URL = "http://106.14.81.193/";
-    public static final String BASE_URL = "http://tmprouji.hboxs.com/";
+    public static final String BASE_URL = "http://101.132.170.212/";
 //    public static final String BASE_URL = "http://192.168.50.83:8081/";
     public static final String PATH_DATA = App.getInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
 

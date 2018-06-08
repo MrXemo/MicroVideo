@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:theme">@style/ToolbarTheme</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -28,6 +28,12 @@
         <item name="maxHeight">48dip</item>
         <item name="indicatorName">BallPulseIndicator</item>
     </style>
+
+
+    <declare-styleable name="AttrsDemo">
+
+    </declare-styleable>
+
 
     <style name="AVLoadingIndicatorView.Large">
         <item name="minWidth">76dip</item>

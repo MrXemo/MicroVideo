@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:background="@color/colorGrayDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <cn.jzvd.JZVideoPlayerStandard
+            android:id="@+id/videoplayer"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"/>
+
+        <TextView
+            android:text="精彩截图"
+            android:paddingTop="@dimen/x8"
+            android:paddingBottom="@dimen/x8"
+            android:paddingRight="@dimen/x8"
+            android:paddingLeft="@dimen/x8"
+            android:textColor="@color/color_red"
+            android:textSize="@dimen/x12"
+            android:drawablePadding="@dimen/x10"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/video_cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="@dimen/x8"
+            android:layout_marginLeft="@dimen/x8"
+            android:layout_marginRight="@dimen/x8"
+            android:layout_marginTop="@dimen/x8"
+            android:textSize="@dimen/x12"
+            android:drawableLeft="@drawable/ic_small_red"
+            android:drawablePadding="@dimen/x4"
+            android:text="热门评论"
+            android:textStyle="bold"
+            android:textColor="@color/colorText_t"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/video_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="@dimen/x6"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_avatar"
+                android:layout_width="@dimen/x24"
+                android:layout_height="@dimen/x24"/>
+
+            <EditText
+                android:id="@+id/edit_comment"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_write"
+                android:paddingLeft="@dimen/x6"
+                android:paddingRight="@dimen/x6"
+                android:layout_width="0dp"
+                android:hint="评论"
+                android:textSize="@dimen/x12"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/seed_comment"
+                android:src="@drawable/ic_seed_comment"
+                android:layout_width="@dimen/x24"
+                android:layout_height="@dimen/x24"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
+

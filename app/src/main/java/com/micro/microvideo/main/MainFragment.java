@@ -46,10 +46,10 @@ public class MainFragment extends SimpleFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.i("json", "token : " + token);
         if (savedInstanceState == null) {
-            mFragments[FIRST] = MemberFragment.newInstance();
-            mFragments[SECOND] = MemberFragment.newInstance();
-            mFragments[THIRD] = MemberFragment.newInstance();
-            mFragments[FOUR] = MemberFragment.newInstance();
+            mFragments[FIRST] = HomeFragment.newInstance();
+            mFragments[SECOND] = IntegralFragment.newInstance();
+            mFragments[THIRD] = ClassifyFragment.newInstance();
+            mFragments[FOUR] = ActorFragment.newInstance();
             mFragments[FIVE] = MemberFragment.newInstance();
 
             loadMultipleRootFragment(R.id.fl_tab_container, FIRST,
@@ -62,10 +62,10 @@ public class MainFragment extends SimpleFragment {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
 
             // 这里我们需要拿到mFragments的引用,也可以通过getChildFragmentManager.getFragments()自行进行判断查找(效率更高些),用下面的方法查找更方便些
-            mFragments[FIRST] = findChildFragment(MemberFragment.class);
-            mFragments[SECOND] = findChildFragment(MemberFragment.class);
-            mFragments[THIRD] = findChildFragment(MemberFragment.class);
-            mFragments[FOUR] = findChildFragment(MemberFragment.class);
+            mFragments[FIRST] = findChildFragment(HomeFragment.class);
+            mFragments[SECOND] = findChildFragment(IntegralFragment.class);
+            mFragments[THIRD] = findChildFragment(ClassifyFragment.class);
+            mFragments[FOUR] = findChildFragment(ActorFragment.class);
             mFragments[FIVE] = findChildFragment(MemberFragment.class);
         }
         return mView;
@@ -78,11 +78,11 @@ public class MainFragment extends SimpleFragment {
 
     @Override
     protected void initEventAndData(View view) {
-        bottomBar.addItem(new BottomBarTab(mContext, R.drawable.ic_main_home, R.drawable.ic_main_nav_home, "首页"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_integral, R.drawable.ic_main_nav_integral, "积分商城"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "个人中心"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "个人中心"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "个人中心"));
+        bottomBar.addItem(new BottomBarTab(mContext, R.drawable.ic_main_home, R.drawable.ic_main_nav_home, "体验"))
+                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_integral, R.drawable.ic_main_nav_integral, "会员区"))
+                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_classify, R.drawable.ic_main_nav_classify, "分类"))
+                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "艺人"))
+                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的"));
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {

@@ -34,7 +34,7 @@ public class MemberFragment extends SingleFragment{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_home;
+        return R.layout.fragment_member;
     }
 
     @Override

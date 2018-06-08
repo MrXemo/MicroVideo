@@ -5,4 +5,5 @@ public class Constants {
     public static final String TOKEN = "token";
 
     public static final String FILE_NAME = "micro_video_sp";
+    public static final String TITLE = "title";
 }

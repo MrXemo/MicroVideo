@@ -32,9 +32,9 @@ public abstract class SimpleActivity extends SupportActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
+        }*/
         super.onCreate(savedInstanceState);
 
         setContentView(getLayout());
