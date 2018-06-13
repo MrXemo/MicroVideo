@@ -1,6 +1,7 @@
 package com.micro.microvideo.main.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,7 +10,9 @@ import android.widget.LinearLayout;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.micro.microvideo.R;
+import com.micro.microvideo.main.DetailActivity;
 import com.micro.microvideo.main.bean.MicroBean;
+import com.micro.microvideo.main.bean.VideoBean;
 
 import java.util.List;
 
@@ -19,10 +22,11 @@ import java.util.List;
 
 public class HeadBanner extends LinearLayout {
     ConvenientBanner mBanner;
+    Context mContext;
 
     public HeadBanner(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
+        mContext = context;
         LayoutInflater.from(context).inflate(R.layout.view_banner, this);
 
         mBanner = (ConvenientBanner) findViewById(R.id.convenientBanner);
@@ -30,15 +34,17 @@ public class HeadBanner extends LinearLayout {
 
     }
 
-    public void setBanner(List<MicroBean> model){
+    public void setBanner(List<VideoBean> model){
         mBanner.setPages(new CBViewHolderCreator<ImageBannerHolderView>() {
             @Override
             public ImageBannerHolderView createHolder() {
                 ImageBannerHolderView view = new ImageBannerHolderView();
                 view.setOnClickListener(new ImageBannerHolderView.OnClickListener() {
                     @Override
-                    public void onClick(String url) {
-//                        RxBus.getIntanceBus().post(new StartFragment(PictureDetailsFragment.newInstance(url, model), 0));
+                    public void onClick(VideoBean bean) {
+                       Intent intent = new Intent(mContext, DetailActivity.class);
+                       intent.putExtra("video", bean);
+                        mContext.startActivity(intent);
                     }
                 });
                 return view;

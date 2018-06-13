@@ -13,20 +13,21 @@ import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.app.App;
 import com.micro.microvideo.main.bean.MicroBean;
+import com.micro.microvideo.main.bean.VideoBean;
 
 
 /**
  * Created by Dell on 2016/11/28.
  */
 
-public class ImageBannerHolderView implements Holder<MicroBean> {
+public class ImageBannerHolderView implements Holder<VideoBean> {
 
     private View view;
 
     private OnClickListener onClickListener;
 
     public interface OnClickListener {
-        void onClick(String url);
+        void onClick(VideoBean bean);
     }
 
     public void setOnClickListener(OnClickListener onClickListener){
@@ -41,7 +42,7 @@ public class ImageBannerHolderView implements Holder<MicroBean> {
 
 
     @Override
-    public void UpdateUI(final Context context, final int position, final MicroBean data) {
+    public void UpdateUI(final Context context, final int position, final VideoBean data) {
 
         final ImageView imageView = (ImageView) view.findViewById(R.id.iv_item_header);
 //        TextView textView = (TextView)view.findViewById(R.id.tv_item_header);
@@ -58,7 +59,7 @@ public class ImageBannerHolderView implements Holder<MicroBean> {
             @Override
             public void onClick(View v) {
                 if (onClickListener != null) {
-                    onClickListener.onClick(data.getImgurl());
+                    onClickListener.onClick(data);
                 }
             }
         });

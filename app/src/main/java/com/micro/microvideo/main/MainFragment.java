@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 
 import com.micro.microvideo.R;
 import com.micro.microvideo.base.SimpleFragment;
+import com.micro.microvideo.base.SingleFragment;
+import com.micro.microvideo.http.ApiCallback;
+import com.micro.microvideo.main.bean.MemberBean;
+import com.micro.microvideo.util.SPUtils;
 import com.micro.microvideo.util.footbar.BottomBar;
 import com.micro.microvideo.util.footbar.BottomBarTab;
 
@@ -19,7 +23,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Created by hboxs006 on 2017/10/18.
  */
 
-public class MainFragment extends SimpleFragment {
+public class MainFragment extends SingleFragment<MemberBean> {
     private final int FIRST = 0;
     private final int SECOND = 1;
     private final int THIRD = 2;
@@ -44,7 +48,14 @@ public class MainFragment extends SimpleFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log.i("json", "token : " + token);
+
+        if (SPUtils.get(getContext(),"member_id", "") == null) {
+            Log.i("json", "member_id 等于空");
+            request(apiServer.register(""));
+        } else {
+            Log.i("json", "member_id 不等于空");
+        }
+
         if (savedInstanceState == null) {
             mFragments[FIRST] = HomeFragment.newInstance();
             mFragments[SECOND] = IntegralFragment.newInstance();
@@ -99,5 +110,20 @@ public class MainFragment extends SimpleFragment {
 
             }
         });
+    }
+
+    @Override
+    protected ApiCallback<MemberBean> setApiCallback() {
+        return new ApiCallback<MemberBean>() {
+            @Override
+            public void onSuccess(MemberBean model) {
+                SPUtils.put(getContext(),"member_id", model.getId());
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        };
     }
 }

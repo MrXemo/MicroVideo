@@ -5,6 +5,7 @@ package com.micro.microvideo.main.bean;
  */
 
 public class MicroBean {
+    private String id;
     private String imgurl;
     private String name;
 
@@ -14,6 +15,14 @@ public class MicroBean {
     public MicroBean(String url, String name) {
         this.imgurl = url;
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImgurl() {

@@ -5,35 +5,36 @@ package com.micro.microvideo.main.bean;
  */
 
 public class CommentBean {
-    private String url;
-    private String name;
-    private String comment;
+    private String imgurl;
+    private String username;
+    private String remark;
 
-    public CommentBean(String comment) {
-        this.comment = comment;
+    public CommentBean(String remark, String username) {
+        this.remark = remark;
+        this.username = username;
     }
 
-    public String getUrl() {
-        return url;
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getImgurl() {
+        return imgurl;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getComment() {
-        return comment;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

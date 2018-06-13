@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.base.ListFragment;
 import com.micro.microvideo.main.bean.MicroBean;
+import com.micro.microvideo.util.MarginAllDecoration;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -38,20 +39,29 @@ public class ClassifyFragment extends ListFragment<MicroBean>{
     @Override
     protected void getData(int pageNumber) {
         title.setText("影片分类");
-        requestList(apiServer.category(1,10,""));
+        requestList(apiServer.category(pageNumber,10,"", null));
+    }
+
+    @Override
+    protected void initEventAndData(View view) {
+        mRecycler.addItemDecoration(new MarginAllDecoration(8));
+        super.initEventAndData(view);
     }
 
     @Override
     protected CommonAdapter<MicroBean> setAdapter(List<MicroBean> list) {
         adapter  = new CommonAdapter<MicroBean>(mContext,R.layout.adapter_common, list) {
             @Override
-            protected void convert(ViewHolder holder, MicroBean microBean, int position) {
+            protected void convert(ViewHolder holder, final MicroBean microBean, int position) {
                 holder.setText(R.id.text, microBean.getName());
                 Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
                 holder.setOnClickListener(R.id.cover, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(mContext, DListActivity.class));
+                        Intent intent = new Intent(mContext, DListActivity.class);
+                        intent.putExtra("type", 0);
+                        intent.putExtra("id", microBean.getId());
+                        startActivity(intent);
                     }
                 });
             }

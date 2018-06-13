@@ -17,6 +17,7 @@ import com.micro.microvideo.R;
 import com.micro.microvideo.base.BaseActivity;
 import com.micro.microvideo.main.bean.CommentBean;
 import com.micro.microvideo.main.bean.MicroBean;
+import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.other.DetailContract;
 import com.micro.microvideo.main.other.DetailPresenter;
 import com.micro.microvideo.util.ItemOffsetDecoration;
@@ -39,14 +40,14 @@ import cn.jzvd.JZVideoPlayerStandard;
 public class DetailActivity extends BaseActivity<DetailPresenter> implements DetailContract.View {
 
     private JZVideoPlayerStandard mJzVideoPlayerStandard;
-    private boolean isVip = false;  //是否为VIP
+    private boolean isVip = true;  //是否为VIP
     private boolean isFirst = true;
     CountDownTimer mTask;
 
     @BindView(R.id.video_cover)
     RecyclerView covers;
-    CommonAdapter<MicroBean> mAdapter;
-    List<MicroBean> mList;
+    CommonAdapter<String> mAdapter;
+    List<String> mList;
     PayDialog mPayDialog;
 
     @BindView(R.id.video_comment)
@@ -55,6 +56,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     EditText mEditText;
     CommonAdapter<CommentBean> adapter;
     List<CommentBean> mCommentList;
+    VideoBean mVideoBean;
 
     @Override
     public void showError(String msg) {
@@ -73,6 +75,13 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
 
     @Override
     protected void initEventAndData() {
+
+        mVideoBean = getIntent().getParcelableExtra("video");
+
+        if (mVideoBean == null || mVideoBean.getVideourl() == null) {
+            toastShow("数据错误");
+            finish();
+        }
         initVideo();
         initRecycler();
         mPayDialog = new PayDialog();
@@ -101,41 +110,40 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     }
 
     public void initRecycler(){
-        mList = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            mList.add(new MicroBean("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1528005765634&di=b151c3c681eb5e22a2defcd5ffdc0198&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D3757545233%2C2682684164%26fm%3D214%26gp%3D0.jpg", "测试"));
-        }
+        mList = mVideoBean.getImgs();
+
         covers.setLayoutManager(new GridLayoutManager(this,3));
         covers.addItemDecoration(new MarginAllDecoration(4));
-        mAdapter = new CommonAdapter<MicroBean>(this,R.layout.view_cover, mList) {
+        mAdapter = new CommonAdapter<String>(this,R.layout.view_cover, mList) {
             @Override
-            protected void convert(ViewHolder holder, MicroBean microBean, int position) {
-                Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
+            protected void convert(ViewHolder holder, String microBean, int position) {
+                Glide.with(mActivity).load(microBean).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
             }
         };
 
         covers.setAdapter(mAdapter);
 
+        LinearLayoutManager layoutManager =  new LinearLayoutManager(this);
+        layoutManager.setSmoothScrollbarEnabled(true);
+        layoutManager.setAutoMeasureEnabled(true);
 
-        mCommentList = new ArrayList<>();
-        for (int i = 0; i <6; i++) {
-            mCommentList.add(new CommentBean("hansdvimd活动ii你覅哦阿瑟东到少年时覅四年Dion"));
-        }
-        comment.setLayoutManager(new LinearLayoutManager(this));
+        comment.setLayoutManager(layoutManager);
+        comment.setHasFixedSize(true);
+        comment.setNestedScrollingEnabled(false);
         comment.addItemDecoration(new ItemOffsetDecoration(this, R.dimen.x1));
-        adapter = new CommonAdapter<CommentBean>(this,R.layout.view_comment, mCommentList) {
-            @Override
-            protected void convert(ViewHolder holder, CommentBean microBean, int position) {
-                holder.setText(R.id.video_comment, microBean.getComment());
-            }
-        };
-        comment.setAdapter(adapter);
+        mPresenter.getComment();
     }
 
     public void initVideo(){
-        mJzVideoPlayerStandard = (JZVideoPlayerStandard) findViewById(R.id.videoplayer);
-        mJzVideoPlayerStandard.setUp("http://jzvd.nathen.cn/c6e3dc12a1154626b3476d9bf3bd7266/6b56c5f0dc31428083757a45764763b0-5287d2089db37e62345123a1be272f8b.mp4"
-                , JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "测试视频");
+        try {
+
+            mJzVideoPlayerStandard = (JZVideoPlayerStandard) findViewById(R.id.videoplayer);
+            mJzVideoPlayerStandard.setUp(mVideoBean.getVideourl(),
+                    JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, mVideoBean.getName());
+        } catch (NullPointerException e){
+            showError("数据异常");
+            finish();
+        }
 
 
         mJzVideoPlayerStandard.seekToInAdvance = -1;
@@ -196,8 +204,22 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     @OnClick(R.id.seed_comment)
     public void seedComment(){
         String comment = mEditText.getText().toString();
-        mCommentList.add(new CommentBean(comment));
+        mCommentList.add(new CommentBean(comment, "阿瑟瑞"));
         adapter.notifyDataSetChanged();
         mEditText.setText("");
+    }
+
+    @Override
+    public void comment(List<CommentBean> beans) {
+        mCommentList = beans;
+        adapter = new CommonAdapter<CommentBean>(this,R.layout.view_comment, mCommentList) {
+            @Override
+            protected void convert(ViewHolder holder, CommentBean microBean, int position) {
+                holder.setText(R.id.video_comment, microBean.getRemark());
+                holder.setText(R.id.name, microBean.getUsername());
+                Glide.with(mContext).load(microBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
+            }
+        };
+        comment.setAdapter(adapter);
     }
 }

@@ -1,6 +1,7 @@
 package com.micro.microvideo.base;
 
 import android.os.Handler;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
@@ -8,12 +9,16 @@ import android.widget.ProgressBar;
 
 
 import com.micro.microvideo.R;
+import com.micro.microvideo.api.ApiServer;
 import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.http.ApiCallback;
+import com.micro.microvideo.http.HttpListResult;
+import com.micro.microvideo.http.HttpMethods;
 import com.micro.microvideo.http.HttpResult;
 import com.micro.microvideo.http.HttpResultFunc;
 import com.micro.microvideo.http.PageBean;
 import com.micro.microvideo.util.ItemOffsetDecoration;
+import com.micro.microvideo.util.MarginAllDecoration;
 import com.micro.microvideo.util.SPUtils;
 import com.micro.microvideo.util.ZRecyclerView.ZRecyclerView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -39,12 +44,12 @@ public abstract class ListActivity<T> extends SimpleActivity {
 
     protected abstract void getData(int pageNumber);
     protected abstract CommonAdapter<T> setAdapter(List<T> list );
+    protected ApiServer apiServer = HttpMethods.getInstance().create(ApiServer.class);
 
     @BindView(R.id.recycler_view)
     ZRecyclerView mRecycler;
     @BindView(R.id.progress)
     ProgressBar progress;
-    ApiCallback<PageBean<T>> apiCallback;
     String token;
 
     protected int pageNumber = 1;
@@ -55,15 +60,15 @@ public abstract class ListActivity<T> extends SimpleActivity {
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_comon_list;
+        return R.layout.fragment_home;
     }
 
     @Override
     protected void initEventAndData() {
 
         token = (String) SPUtils.get(mContext, Constants.TOKEN, "");
-        mRecycler.setLayoutManager(new LinearLayoutManager(mContext));
-        mRecycler.addItemDecoration(new ItemOffsetDecoration(mContext, R.dimen.x1));
+        mRecycler.setLayoutManager(new GridLayoutManager(mContext,2));
+        mRecycler.addItemDecoration(new MarginAllDecoration(8));
 
         //设置上拉刷新、 下拉加载
         mRecycler.setLoadingListener(new ZRecyclerView.LoadingListener() {
@@ -89,46 +94,27 @@ public abstract class ListActivity<T> extends SimpleActivity {
             }
         });
 
-        //设置返回事件
-        apiCallback = new ApiCallback<PageBean<T>>() {
-            @Override
-            public void onSuccess(PageBean<T> model) {
-                if (pageNumber > 1) {
-                    moreDate(model);
-                } else {
-                    headData(model);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                progress.setVisibility(View.GONE);
-                toastShow(msg);
-
-            }
-        };
-
         getData(pageNumber);
     }
 
     //更多数据
-    private void moreDate(PageBean<T> model){
+    private void moreDate(HttpListResult<T> model){
         pageNumber++;
-        list.addAll(model.getContent());
+        list.addAll(model.getData());
         mRecycler.loadMoreComplete();
         adapter.notifyDataSetChanged();
     }
 
     //第一页数据
-    private void headData(PageBean<T> model){
-        totalPage = model.getTotalPage();
+    private void headData(HttpListResult<T> model){
+        totalPage = model.getTotal();
         pageNumber += 1;
-        list = model.getContent();
+        list = model.getData();
         progress.setVisibility(View.GONE);
         adapter = setAdapter(list);
         mRecycler.setAdapter(adapter);
         mRecycler.refreshComplete();
-        if (model.getTotalPage() <= 1) {
+        if (model.getTotal() <= 1) {
             mRecycler.setNoMore(true);
         } else {
             mRecycler.setNoMore(false);
@@ -159,23 +145,22 @@ public abstract class ListActivity<T> extends SimpleActivity {
         mCompositeDisposable.add(d);
     }
 
-    public void request(Observable<HttpResult<PageBean<T>>> observable) {
-        if (apiCallback == null) {
-            return;
-        }
-        observable
-                .map(new HttpResultFunc<PageBean<T>>())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<PageBean<T>>() {
+    public void requestList(Observable<HttpListResult<T>> observable) {
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpListResult<T>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         addSubscription(d);
                     }
 
                     @Override
-                    public void onNext(PageBean<T> o) {
-                        apiCallback.onSuccess(o);
+                    public void onNext(HttpListResult<T> model) {
+                        Log.i("json","size : " + model.getData().size());
+                        if (pageNumber > 1) {
+                            moreDate(model);
+                        } else {
+                            headData(model);
+                        }
                     }
 
                     @Override
@@ -222,13 +207,13 @@ public abstract class ListActivity<T> extends SimpleActivity {
         String msg;
         if (e instanceof SocketTimeoutException) {
             msg = "网络中断，请检查您的网络状态";
-            apiCallback.onFailure(msg);
+            toastShow(msg);
         } else if (e instanceof ConnectException) {
             msg = "网络中断，请检查您的网络状态";
-            apiCallback.onFailure(msg);
+            toastShow(msg);
         } else {
             Log.e("json","发送错误",e);
-            apiCallback.onFailure(e.getMessage());
+            toastShow(e.getMessage());
         }
     }
 }

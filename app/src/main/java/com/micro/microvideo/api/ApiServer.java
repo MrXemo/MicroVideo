@@ -2,7 +2,10 @@ package com.micro.microvideo.api;
 
 import com.micro.microvideo.http.HttpListResult;
 import com.micro.microvideo.http.HttpResult;
+import com.micro.microvideo.main.bean.CommentBean;
+import com.micro.microvideo.main.bean.MemberBean;
 import com.micro.microvideo.main.bean.MicroBean;
+import com.micro.microvideo.main.bean.VideoBean;
 
 
 import io.reactivex.Observable;
@@ -21,6 +24,37 @@ public interface ApiServer {
     @GET("api/category/list")
     Observable<HttpListResult<MicroBean>> category(@Query("page") int page,
                                                    @Query("pageSize") int pageSize,
-                                                   @Query("name") String name );
+                                                   @Query("name") String name,
+                                                   @Query("type") Integer type);
 
+    /**
+     * 明星分类
+     */
+    @GET("api/star/list")
+    Observable<HttpListResult<MicroBean>> actor(@Query("page") int page,
+                                                @Query("pageSize") int pageSize,
+                                                @Query("name") String name);
+
+    /**
+     * 视频列表
+     */
+    @GET("api/video/list")
+    Observable<HttpListResult<VideoBean>> videoList(@Query("page") int page,
+                                                    @Query("pageSize") int pageSize,
+                                                    @Query("name") String name,
+                                                    @Query("cid") String cid,
+                                                    @Query("sid") String sid,
+                                                    @Query("type") Integer type);
+
+    /**
+     * 获取视频评论
+     */
+    @GET("api/comment/find")
+    Observable<HttpListResult<CommentBean>> comment();
+
+    /**
+     * 注册接口
+     */
+    @GET("api/user/add")
+    Observable<HttpResult<MemberBean>> register(@Query("invite_id") String invite);
 }

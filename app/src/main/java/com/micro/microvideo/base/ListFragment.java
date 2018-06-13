@@ -12,7 +12,9 @@ import com.micro.microvideo.R;
 import com.micro.microvideo.api.ApiServer;
 import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.http.ApiCallback;
+import com.micro.microvideo.http.ApiListCallback;
 import com.micro.microvideo.http.HttpListResult;
+import com.micro.microvideo.http.HttpListResultFunc;
 import com.micro.microvideo.http.HttpMethods;
 import com.micro.microvideo.http.HttpResult;
 import com.micro.microvideo.http.HttpResultFunc;
@@ -45,14 +47,14 @@ public abstract class ListFragment<T> extends SimpleFragment  {
     protected ApiServer apiServer = HttpMethods.getInstance().create(ApiServer.class);
 
     @BindView(R.id.recycler_view)
-    ZRecyclerView mRecycler;
+    protected ZRecyclerView mRecycler;
     @BindView(R.id.progress)
     ProgressBar progress;
     protected String token;
 
     protected int pageNumber = 1;
     protected int totalPage = 1;
-    private List<T> list = null;
+    protected List<T> list = null;
     private CommonAdapter<T> adapter = null;
 
     @Override
@@ -64,7 +66,6 @@ public abstract class ListFragment<T> extends SimpleFragment  {
     protected void initEventAndData(View view) {
         token = (String) SPUtils.get(mContext, Constants.TOKEN, "");
         mRecycler.setLayoutManager(new GridLayoutManager(mContext,2));
-        mRecycler.addItemDecoration(new MarginAllDecoration(8));
 
         //设置上拉刷新、 下拉加载
         mRecycler.setLoadingListener(new ZRecyclerView.LoadingListener() {
@@ -171,19 +172,19 @@ public abstract class ListFragment<T> extends SimpleFragment  {
                 });
     }
 
-    public<F> void request(Observable<HttpResult<F>> observable, final ApiCallback<F> apiCallback) {
+    public<F> void request(Observable<HttpListResult<F>> observable, final ApiListCallback<F> apiCallback) {
         observable
-                .map(new HttpResultFunc<F>())
+                .map(new HttpListResultFunc<F>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<F>() {
+                .subscribe(new Observer<List<F>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         addSubscription(d);
                     }
 
                     @Override
-                    public void onNext(F o) {
+                    public void onNext(List<F> o) {
                         apiCallback.onSuccess(o);
                     }
 
