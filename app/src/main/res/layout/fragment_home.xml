@@ -22,19 +22,6 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <Button
-        android:id="@+id/wx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="微信" />
-
-    <Button
-        android:id="@+id/ali"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="支付宝" />
-
     <include layout="@layout/view_zrecyclerview" />
 
 </LinearLayout>

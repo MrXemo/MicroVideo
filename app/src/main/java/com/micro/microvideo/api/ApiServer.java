@@ -9,7 +9,10 @@ import com.micro.microvideo.main.bean.VideoBean;
 
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -57,4 +60,13 @@ public interface ApiServer {
      */
     @GET("api/user/add")
     Observable<HttpResult<MemberBean>> register(@Query("invite_id") String invite);
+
+    /**
+     * 支付接口
+     */
+    @FormUrlEncoded
+    @POST("api/pay/getPayUrl")
+    Observable<HttpResult<String>> payUrl(@Field("user_id") String userId,
+                                          @Field("trade_type") String trade_type,
+                                          @Field("total_fee") String total_fee);
 }

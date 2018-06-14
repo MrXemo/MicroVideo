@@ -200,6 +200,34 @@ public abstract class ListFragment<T> extends SimpleFragment  {
                 });
     }
 
+    public<F> void requests(Observable<HttpResult<F>> observable, final ApiCallback<F> apiCallback) {
+        observable
+                .map(new HttpResultFunc<F>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<F>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addSubscription(d);
+                    }
+
+                    @Override
+                    public void onNext(F o) {
+                        apiCallback.onSuccess(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        errorDispose(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     private void errorDispose(Throwable e){
         String msg;
         if (e instanceof SocketTimeoutException) {

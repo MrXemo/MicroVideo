@@ -18,14 +18,16 @@ import com.micro.microvideo.R;
 
 public class PayDialog extends DialogFragment {
 
-    WarnListener mWarnListener;
+    PayListener mPayListener;
 
-    public interface WarnListener {
-        void affirmListener();
+    public interface PayListener {
+        void wxPayListener();
+
+        void aliPayListener();
     }
 
-    public void setWarnListener(WarnListener warnListener) {
-        mWarnListener = warnListener;
+    public void setPayListener(PayListener payListener) {
+        mPayListener = payListener;
     }
 
     @Nullable
@@ -34,14 +36,25 @@ public class PayDialog extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.dailog_pay, container, false);
 
-        TextView sure = (TextView) view.findViewById(R.id.sure);
+        TextView wechat_pay = (TextView) view.findViewById(R.id.wechat_pay);
+        TextView ali_pay = (TextView) view.findViewById(R.id.ali_pay);
         ImageView close = (ImageView) view.findViewById(R.id.close);
 
-        sure.setOnClickListener(new View.OnClickListener() {
+        wechat_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mWarnListener != null) {
-                    mWarnListener.affirmListener();
+                if (mPayListener != null) {
+                    mPayListener.wxPayListener();
+                    dismiss();
+                }
+            }
+        });
+
+        ali_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPayListener != null) {
+                    mPayListener.aliPayListener();
                     dismiss();
                 }
             }

@@ -41,9 +41,6 @@ public class HomeFragment extends ListFragment<VideoBean>{
     CommonAdapter<VideoBean> adapter;
     List<VideoBean> mVideoBeans;
 
-    private static final String URL_WX = "http://weixin.vvjvv.cn/platform/pay/unifiedorder/video?sign=11316a4c0da3b15712d3255ef8c4dffc&body=vip&mch_id=gxtttooo&notify_url=http://www.baidu.com&out_trade_no=1528901705863&redirect_url=http://www.baidu.com&spbill_create_ip=192.168.1.1&total_fee=1&trade_type=WX";
-    private static final String URL_ALI = "http://weixin.vvjvv.cn/platform/pay/unifiedorder/video?sign=11316a4c0da3b15712d3255ef8c4dffc&body=vip&mch_id=gxtttooo&notify_url=http://www.baidu.com&out_trade_no=1528901705863&redirect_url=http://www.baidu.com&spbill_create_ip=192.168.1.1&total_fee=1&trade_type=ALI";
-
 
     public static HomeFragment newInstance() {
         
@@ -98,29 +95,5 @@ public class HomeFragment extends ListFragment<VideoBean>{
             }
         };
         return adapter;
-    }
-
-    @OnClick(R.id.wx)
-    public void wx(){
-        openUrl(URL_WX);
-    }
-
-
-    @OnClick(R.id.ali)
-    public void ali(){
-        openUrl(URL_ALI);
-    }
-
-    public void openUrl(String url) {
-        // 防止有大写
-        url = url.replace(url.substring(0, 7), url.substring(0, 7)
-                .toLowerCase());
-        Uri uri = Uri.parse(url);
-        try {
-            Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(it);
-        } catch (Exception e) {
-        }
     }
 }

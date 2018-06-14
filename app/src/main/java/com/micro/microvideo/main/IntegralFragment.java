@@ -1,5 +1,7 @@
 package com.micro.microvideo.main;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,8 +10,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.base.ListFragment;
+import com.micro.microvideo.http.ApiCallback;
+import com.micro.microvideo.http.ApiListCallback;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.util.MarginAllDecoration;
+import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -40,6 +45,17 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     protected void getData(int pageNumber) {
         title.setText("VIP专区");
         mPayDialog = new PayDialog();
+        mPayDialog.setPayListener(new PayDialog.PayListener() {
+            @Override
+            public void wxPayListener() {
+                pay("WX", "0.01");
+            }
+
+            @Override
+            public void aliPayListener() {
+                pay("ALI", "0.01");
+            }
+        });
         requestList(apiServer.videoList(pageNumber,10,null, null, null,2));
     }
 
@@ -65,5 +81,33 @@ public class IntegralFragment extends ListFragment<VideoBean> {
             }
         };
         return adapter;
+    }
+
+    private void pay(String type, String amount){
+        String user = (String) SPUtils.get(mContext, "member_id", "");
+        requests(apiServer.payUrl(user, type, amount), new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String url) {
+                openUrl(url);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        });
+    }
+
+    public void openUrl(String url) {
+        // 防止有大写
+        url = url.replace(url.substring(0, 7), url.substring(0, 7)
+                .toLowerCase());
+        Uri uri = Uri.parse(url);
+        try {
+            Intent it = new Intent(Intent.ACTION_VIEW, uri);
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(it);
+        } catch (Exception e) {
+        }
     }
 }

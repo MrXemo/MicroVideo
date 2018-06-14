@@ -49,11 +49,12 @@ public class MainFragment extends SingleFragment<MemberBean> {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        if (SPUtils.get(getContext(),"member_id", "") == null) {
+        String memberId = (String) SPUtils.get(getContext(),"member_id", "");
+        if (memberId == null || memberId.equals("")) {
             Log.i("json", "member_id 等于空");
             request(apiServer.register(""));
         } else {
-            Log.i("json", "member_id 不等于空");
+            Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(),"member_id", ""));
         }
 
         if (savedInstanceState == null) {
