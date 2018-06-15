@@ -1,6 +1,5 @@
 package com.micro.microvideo.main;
 
-import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,14 +8,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.base.BaseActivity;
 import com.micro.microvideo.main.bean.CommentBean;
-import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.other.DetailContract;
 import com.micro.microvideo.main.other.DetailPresenter;
@@ -25,7 +23,6 @@ import com.micro.microvideo.util.MarginAllDecoration;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -174,6 +171,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
                 return false;
             }
         });
+
         ImageView full = mJzVideoPlayerStandard.fullscreenButton;
         full.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -187,6 +185,10 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
                 return false;
             }
         });
+
+        ProgressBar progressBar = mJzVideoPlayerStandard.loadingProgressBar;
+
+
 
         mTask = new CountDownTimer(10000, 1000) {
             @Override

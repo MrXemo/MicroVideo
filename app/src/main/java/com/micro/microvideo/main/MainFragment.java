@@ -8,15 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.micro.microvideo.R;
-import com.micro.microvideo.base.SimpleFragment;
 import com.micro.microvideo.base.SingleFragment;
 import com.micro.microvideo.http.ApiCallback;
 import com.micro.microvideo.main.bean.MemberBean;
+import com.micro.microvideo.main.bean.NoticeBean;
+import com.micro.microvideo.util.RxBus;
 import com.micro.microvideo.util.SPUtils;
 import com.micro.microvideo.util.footbar.BottomBar;
 import com.micro.microvideo.util.footbar.BottomBarTab;
 
 import butterknife.BindView;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -31,6 +34,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
     private final int FIVE = 4;
 
     private SupportFragment[] mFragments = new SupportFragment[5];
+    private RxBus rxBus;        //    RxBus
 
     @BindView(R.id.bottomBar)
     BottomBar bottomBar;
@@ -52,7 +56,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
         String memberId = (String) SPUtils.get(getContext(),"member_id", "");
         if (memberId == null || memberId.equals("")) {
             Log.i("json", "member_id 等于空");
-            request(apiServer.register(""));
+            request(apiServer.register("3"));
         } else {
             Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(),"member_id", ""));
         }
@@ -114,11 +118,33 @@ public class MainFragment extends SingleFragment<MemberBean> {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        rxBus = RxBus.getIntanceBus();
+        rxBus.registerRxBus(NoticeBean.class, new Consumer<NoticeBean>() {
+            @Override
+            public void accept(@NonNull NoticeBean event) throws Exception {
+                String memberId = (String) SPUtils.get(getContext(),"member_id", "");
+                request(apiServer.getInfo(memberId));
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (rxBus != null) {
+            rxBus.unSubscribe(this);
+        }
+    }
+
+    @Override
     protected ApiCallback<MemberBean> setApiCallback() {
         return new ApiCallback<MemberBean>() {
             @Override
             public void onSuccess(MemberBean model) {
                 SPUtils.put(getContext(),"member_id", model.getId());
+                toastShow(model.getRoleText());
             }
 
             @Override

@@ -1,35 +1,24 @@
 package com.micro.microvideo.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.base.ListFragment;
-import com.micro.microvideo.base.SingleFragment;
-import com.micro.microvideo.http.ApiCallback;
 import com.micro.microvideo.http.ApiListCallback;
-import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.view.HeadBanner;
-import com.micro.microvideo.util.ItemOffsetDecoration;
-import com.micro.microvideo.util.MarginAllDecoration;
-import com.micro.microvideo.util.ZRecyclerView.ZRecyclerView;
+import com.micro.microvideo.util.RxBus;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by William on 2018/5/30.
@@ -40,6 +29,7 @@ public class HomeFragment extends ListFragment<VideoBean>{
     TextView title;
     CommonAdapter<VideoBean> adapter;
     List<VideoBean> mVideoBeans;
+    private RxBus rxBus;        //    RxBus
 
 
     public static HomeFragment newInstance() {

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/x6"
-            android:text="包月会员￥22元"
+            android:text="包月会员￥0.01元"
             android:textColor="@color/colorRedLight"/>
 
         <RadioButton
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/x6"
             android:checked="true"
-            android:text="包月会员￥39元"
+            android:text="包月会员￥0.02元"
             android:textColor="@color/color_orange"/>
 
         <RadioButton
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/x6"
-            android:text="永久会员￥72元"
+            android:text="永久会员￥0.03元"
             android:textColor="@color/color_red"/>
     </RadioGroup>
 
