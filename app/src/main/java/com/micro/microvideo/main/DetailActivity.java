@@ -1,6 +1,5 @@
 package com.micro.microvideo.main;
 
-import android.os.CountDownTimer;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
@@ -37,9 +36,8 @@ import cn.jzvd.JZVideoPlayerStandard;
 public class DetailActivity extends BaseActivity<DetailPresenter> implements DetailContract.View {
 
     private JZVideoPlayerStandard mJzVideoPlayerStandard;
-    private boolean isVip = true;  //是否为VIP
+    private boolean isVip = false;  //是否为VIP
     private boolean isFirst = true;
-    CountDownTimer mTask;
 
     @BindView(R.id.video_cover)
     RecyclerView covers;
@@ -94,9 +92,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
 
     @Override
     protected void onDestroy() {
-        if (mTask != null) {
-            mTask.cancel();
-        }
         super.onDestroy();
     }
 
@@ -106,12 +101,12 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         JZVideoPlayer.releaseAllVideos();
     }
 
-    public void initRecycler(){
+    public void initRecycler() {
         mList = mVideoBean.getImgs();
 
-        covers.setLayoutManager(new GridLayoutManager(this,3));
+        covers.setLayoutManager(new GridLayoutManager(this, 3));
         covers.addItemDecoration(new MarginAllDecoration(4));
-        mAdapter = new CommonAdapter<String>(this,R.layout.view_cover, mList) {
+        mAdapter = new CommonAdapter<String>(this, R.layout.view_cover, mList) {
             @Override
             protected void convert(ViewHolder holder, String microBean, int position) {
                 Glide.with(mActivity).load(microBean).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
@@ -120,7 +115,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
 
         covers.setAdapter(mAdapter);
 
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setSmoothScrollbarEnabled(true);
         layoutManager.setAutoMeasureEnabled(true);
 
@@ -131,13 +126,13 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         mPresenter.getComment();
     }
 
-    public void initVideo(){
+    public void initVideo() {
         try {
 
             mJzVideoPlayerStandard = (JZVideoPlayerStandard) findViewById(R.id.videoplayer);
             mJzVideoPlayerStandard.setUp(mVideoBean.getVideourl(),
                     JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, mVideoBean.getName());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             showError("数据异常");
             finish();
         }
@@ -156,7 +151,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
                         //判断是否为vip
                         if (!isVip) {
                             if (isFirst) {
-                                mTask.start();
                                 isFirst = false;
                             } else {
                                 mPayDialog.show(getSupportFragmentManager(), "pay");
@@ -186,25 +180,40 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             }
         });
 
-        ProgressBar progressBar = mJzVideoPlayerStandard.loadingProgressBar;
 
+        if (!isVip) {
+            SeekBar seekBar = mJzVideoPlayerStandard.progressBar;
+            seekBar.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    toastShow("非会员不能快进");
+                    return true;
+                }
+            });
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    long second = (long) progress * mJzVideoPlayerStandard.getDuration() / 100000L % 60;
+                    if (second >= 60) {
+                        JZVideoPlayerStandard.goOnPlayOnPause();
+                    }
+                }
 
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
 
-        mTask = new CountDownTimer(10000, 1000) {
-            @Override
-            public void onTick(long l) {
+                }
 
-            }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
 
-            @Override
-            public void onFinish() {
-                JZVideoPlayerStandard.goOnPlayOnPause();
-            }
-        };
+                }
+            });
+        }
     }
 
     @OnClick(R.id.seed_comment)
-    public void seedComment(){
+    public void seedComment() {
         String comment = mEditText.getText().toString();
         mCommentList.add(new CommentBean(comment, "阿瑟瑞"));
         adapter.notifyDataSetChanged();
@@ -214,7 +223,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     @Override
     public void comment(List<CommentBean> beans) {
         mCommentList = beans;
-        adapter = new CommonAdapter<CommentBean>(this,R.layout.view_comment, mCommentList) {
+        adapter = new CommonAdapter<CommentBean>(this, R.layout.view_comment, mCommentList) {
             @Override
             protected void convert(ViewHolder holder, CommentBean microBean, int position) {
                 holder.setText(R.id.video_comment, microBean.getRemark());
