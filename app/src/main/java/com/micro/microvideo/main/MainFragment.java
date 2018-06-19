@@ -33,6 +33,12 @@ public class MainFragment extends SingleFragment<MemberBean> {
     private final int FOUR = 3;
     private final int FIVE = 4;
 
+    private BottomBarTab mTab1;
+    private BottomBarTab mTab2;
+    private BottomBarTab mTab3;
+    private BottomBarTab mTab4;
+    private BottomBarTab mTab5;
+
     private SupportFragment[] mFragments = new SupportFragment[5];
     private RxBus rxBus;        //    RxBus
 
@@ -53,12 +59,12 @@ public class MainFragment extends SingleFragment<MemberBean> {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        String memberId = (String) SPUtils.get(getContext(),"member_id", "");
+        String memberId = (String) SPUtils.get(getContext(), "member_id", "");
         if (memberId == null || memberId.equals("")) {
             Log.i("json", "member_id 等于空");
             request(apiServer.register("3"));
         } else {
-            Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(),"member_id", ""));
+            Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(), "member_id", ""));
         }
 
         if (savedInstanceState == null) {
@@ -94,11 +100,26 @@ public class MainFragment extends SingleFragment<MemberBean> {
 
     @Override
     protected void initEventAndData(View view) {
-        bottomBar.addItem(new BottomBarTab(mContext, R.drawable.ic_main_home, R.drawable.ic_main_nav_home, "体验"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_integral, R.drawable.ic_main_nav_integral, "会员区"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_classify, R.drawable.ic_main_nav_classify, "分类"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "艺人"))
-                .addItem(new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的"));
+        mTab1 = new BottomBarTab(mContext, R.drawable.ic_main_home, R.drawable.ic_main_nav_home, "体验");
+        mTab2 = new BottomBarTab(mContext, R.drawable.ic_main_integral, R.drawable.ic_main_nav_integral, "会员区");
+        mTab3 = new BottomBarTab(mContext, R.drawable.ic_main_classify, R.drawable.ic_main_nav_classify, "分类");
+        mTab4= new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "艺人");
+        mTab5 = new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的");
+
+        Integer roleId = (Integer) SPUtils.get(mContext, "role_id", 1);
+        if (roleId == 2) {
+            mTab1.setText("会员区");
+            mTab2.setText("超级会员");
+        } else if (roleId == 3){
+            mTab1.setText("超级会员");
+            mTab2.setText("黄金会员");
+        }
+
+        bottomBar.addItem(mTab1)
+                .addItem(mTab2)
+                .addItem(mTab3)
+                .addItem(mTab4)
+                .addItem(mTab5);
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {
@@ -124,7 +145,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
         rxBus.registerRxBus(NoticeBean.class, new Consumer<NoticeBean>() {
             @Override
             public void accept(@NonNull NoticeBean event) throws Exception {
-                String memberId = (String) SPUtils.get(getContext(),"member_id", "");
+                String memberId = (String) SPUtils.get(getContext(), "member_id", "");
                 request(apiServer.getInfo(memberId));
             }
         });
@@ -143,7 +164,19 @@ public class MainFragment extends SingleFragment<MemberBean> {
         return new ApiCallback<MemberBean>() {
             @Override
             public void onSuccess(MemberBean model) {
-                SPUtils.put(getContext(),"member_id", model.getId());
+                SPUtils.put(getContext(), "member_id", model.getId());
+                if (model.getRole_id().compareTo((Integer) SPUtils.get(mContext, "role_id", 1)) > 1){
+                    SPUtils.put(getContext(), "role_id", model.getRole_id());
+                    if (mFragments != null) {
+                        for (SupportFragment fragment : mFragments) {
+                            if (fragment instanceof HomeFragment) {
+                                ((HomeFragment)fragment).refurbish();
+                            } else if (fragment instanceof IntegralFragment){
+                                ((IntegralFragment)fragment).refurbish();
+                            }
+                        }
+                    }
+                }
                 toastShow(model.getRoleText());
             }
 

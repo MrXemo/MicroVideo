@@ -19,6 +19,7 @@ import com.micro.microvideo.main.other.DetailContract;
 import com.micro.microvideo.main.other.DetailPresenter;
 import com.micro.microvideo.util.ItemOffsetDecoration;
 import com.micro.microvideo.util.MarginAllDecoration;
+import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -79,7 +80,8 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         }
         initVideo();
         initRecycler();
-        mPayDialog = new PayDialog();
+        Integer role = (Integer) SPUtils.get(this, "role_id", 1);
+        mPayDialog = PayDialog.newInstance(role);
     }
 
     @Override

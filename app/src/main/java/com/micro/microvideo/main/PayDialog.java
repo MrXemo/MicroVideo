@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.micro.microvideo.R;
@@ -26,6 +27,15 @@ public class PayDialog extends DialogFragment {
         void aliPayListener();
     }
 
+    public static PayDialog newInstance(Integer type) {
+
+        Bundle args = new Bundle();
+        args.putInt("type", type);
+        PayDialog fragment = new PayDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public void setPayListener(PayListener payListener) {
         mPayListener = payListener;
     }
@@ -38,7 +48,11 @@ public class PayDialog extends DialogFragment {
 
         TextView wechat_pay = (TextView) view.findViewById(R.id.wechat_pay);
         TextView ali_pay = (TextView) view.findViewById(R.id.ali_pay);
+        RadioGroup group = (RadioGroup) view.findViewById(R.id.radio_group);
         ImageView close = (ImageView) view.findViewById(R.id.close);
+        if (getArguments().getInt("type") != 1){
+            group.setVisibility(View.GONE);
+        }
 
         wechat_pay.setOnClickListener(new View.OnClickListener() {
             @Override

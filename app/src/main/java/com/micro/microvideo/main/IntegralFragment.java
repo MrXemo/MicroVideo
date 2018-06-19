@@ -51,7 +51,8 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     @Override
     protected void getData(int pageNumber) {
         title.setText("VIP专区");
-        mPayDialog = new PayDialog();
+        Integer role = (Integer) SPUtils.get(mContext, "role_id", 1);
+        mPayDialog = PayDialog.newInstance(role);
         mPayDialog.setPayListener(new PayDialog.PayListener() {
             @Override
             public void wxPayListener() {
@@ -70,6 +71,10 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     protected void initEventAndData(View view) {
         mRecycler.addItemDecoration(new MarginAllDecoration(8));
         super.initEventAndData(view);
+    }
+
+    public void refurbish(){
+        requestList(apiServer.videoList(pageNumber,10,null, null, null,1));
     }
 
     @Override

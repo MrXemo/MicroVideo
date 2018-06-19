@@ -67,6 +67,10 @@ public class HomeFragment extends ListFragment<VideoBean>{
         requestList(apiServer.videoList(pageNumber,10,null, null, null,1));
     }
 
+    public void refurbish(){
+        requestList(apiServer.videoList(pageNumber,10,null, null, null,1));
+    }
+
     @Override
     protected CommonAdapter<VideoBean> setAdapter(List<VideoBean> list) {
         adapter  = new CommonAdapter<VideoBean>(mContext,R.layout.adapter_home, list) {

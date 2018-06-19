@@ -114,6 +114,10 @@ public class BottomBarTab extends FrameLayout {
         }
     }
 
+    public void setText(String text) {
+        mTvTitle.setText(text);
+    }
+
     public void setTabPosition(int position) {
         mTabPosition = position;
         if (position == 0) {
