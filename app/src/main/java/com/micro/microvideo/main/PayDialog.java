@@ -12,6 +12,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
+import com.micro.microvideo.util.SPUtils;
 
 /**
  * Created by William on 2018/6/3.
@@ -50,7 +52,7 @@ public class PayDialog extends DialogFragment {
         TextView ali_pay = (TextView) view.findViewById(R.id.ali_pay);
         RadioGroup group = (RadioGroup) view.findViewById(R.id.radio_group);
         ImageView close = (ImageView) view.findViewById(R.id.close);
-        if (getArguments().getInt("type") != 1){
+        if ((Integer)SPUtils.get(getActivity(), Constants.ROLE_ID, 0 ) != 0){
             group.setVisibility(View.GONE);
         }
 

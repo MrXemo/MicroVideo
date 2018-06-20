@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.ListFragment;
 import com.micro.microvideo.http.ApiCallback;
 import com.micro.microvideo.main.bean.NoticeBean;
@@ -38,6 +39,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     CommonAdapter<VideoBean> adapter;
     PayDialog mPayDialog;
     boolean isPay = false;
+    private String mMember;
 
     public static IntegralFragment newInstance() {
 
@@ -51,7 +53,9 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     @Override
     protected void getData(int pageNumber) {
         title.setText("VIP专区");
-        Integer role = (Integer) SPUtils.get(mContext, "role_id", 1);
+        Integer role = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
+        Log.i("json", "getData: role : " + role);
+        mMember = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         mPayDialog = PayDialog.newInstance(role);
         mPayDialog.setPayListener(new PayDialog.PayListener() {
             @Override
@@ -64,7 +68,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
                 pay("ALI", "1");
             }
         });
-        requestList(apiServer.videoList(pageNumber,10,null, null, null,2));
+        requestList(apiServer.videoList(pageNumber,10,null, null, null,2, mMember));
     }
 
     @Override
@@ -74,7 +78,8 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     }
 
     public void refurbish(){
-        requestList(apiServer.videoList(pageNumber,10,null, null, null,1));
+        pageNumber = 1;
+        requestList(apiServer.videoList(1,10,null, null, null,2, mMember));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.micro.microvideo.main;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +14,23 @@ import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.BaseActivity;
 import com.micro.microvideo.main.bean.CommentBean;
+import com.micro.microvideo.main.bean.MemberBean;
+import com.micro.microvideo.main.bean.NoticeBean;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.other.DetailContract;
 import com.micro.microvideo.main.other.DetailPresenter;
 import com.micro.microvideo.util.ItemOffsetDecoration;
 import com.micro.microvideo.util.MarginAllDecoration;
+import com.micro.microvideo.util.RxBus;
 import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -53,6 +62,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     CommonAdapter<CommentBean> adapter;
     List<CommentBean> mCommentList;
     VideoBean mVideoBean;
+    boolean isPay = false;
 
     @Override
     public void showError(String msg) {
@@ -78,10 +88,25 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             toastShow("数据错误");
             finish();
         }
+
+        if ((Integer) SPUtils.get(this, Constants.ROLE_ID, 0) == 3) {
+            isVip = true;
+        }
         initVideo();
         initRecycler();
-        Integer role = (Integer) SPUtils.get(this, "role_id", 1);
+        Integer role = (Integer) SPUtils.get(this, Constants.ROLE_ID, 0);
         mPayDialog = PayDialog.newInstance(role);
+        mPayDialog.setPayListener(new PayDialog.PayListener() {
+            @Override
+            public void wxPayListener() {
+                pay("WX", "1");
+            }
+
+            @Override
+            public void aliPayListener() {
+                pay("ALI", "1");
+            }
+        });
     }
 
     @Override
@@ -183,35 +208,42 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         });
 
 
-        if (!isVip) {
-            SeekBar seekBar = mJzVideoPlayerStandard.progressBar;
-            seekBar.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
+        SeekBar seekBar = mJzVideoPlayerStandard.progressBar;
+        seekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (!isVip) {
                     toastShow("非会员不能快进");
                     return true;
+                } else {
+                    return false;
                 }
-            });
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!isVip) {
                     long second = (long) progress * mJzVideoPlayerStandard.getDuration() / 100000L % 60;
-                    if (second >= 60) {
+                    Log.i("json", "second : " + second);
+                    if (second >= 58) {
                         JZVideoPlayerStandard.goOnPlayOnPause();
+                        mPayDialog.show(getSupportFragmentManager(), "pay");
                     }
                 }
+            }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
-                }
+            }
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     @OnClick(R.id.seed_comment)
@@ -234,5 +266,56 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             }
         };
         comment.setAdapter(adapter);
+    }
+
+    private void pay(String type, String amount) {
+        String user = (String) SPUtils.get(this, "member_id", "");
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("user_id", user);
+            obj.put("trade_type", type);
+            obj.put("total_fee", amount);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("json", "obj : " + obj.toString());
+
+
+        mPresenter.payVideo(obj.toString());
+    }
+
+    @Override
+    public void openUrl(String url) {
+        isPay = true;
+        url = url.replace(url.substring(0, 7), url.substring(0, 7)
+                .toLowerCase());
+        Uri uri = Uri.parse(url);
+        try {
+            Intent it = new Intent(Intent.ACTION_VIEW, uri);
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(it);
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isPay) {
+            Log.i("json", "onResume ");
+            RxBus.getIntanceBus().post(new NoticeBean());
+            mPresenter.getRole((String) SPUtils.get(this, Constants.MEMBER_ID, ""));
+            isPay = false;
+        }
+    }
+
+    @Override
+    public void getMember(MemberBean memberBean) {
+        if (memberBean.getRole_id() == 3) {
+            isVip = true;
+            initVideo();
+        }
     }
 }

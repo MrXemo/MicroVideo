@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.SingleFragment;
 import com.micro.microvideo.http.ApiCallback;
 import com.micro.microvideo.main.bean.MemberBean;
@@ -106,13 +107,16 @@ public class MainFragment extends SingleFragment<MemberBean> {
         mTab4= new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "艺人");
         mTab5 = new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的");
 
-        Integer roleId = (Integer) SPUtils.get(mContext, "role_id", 1);
-        if (roleId == 2) {
+        Integer roleId = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
+        if (roleId == 1) {
             mTab1.setText("会员区");
             mTab2.setText("超级会员");
-        } else if (roleId == 3){
+        } else if (roleId == 2){
             mTab1.setText("超级会员");
             mTab2.setText("黄金会员");
+        } else if (roleId == 3){
+            mTab1.setText("黄金会员");
+            mTab2.setText("铂金会员");
         }
 
         bottomBar.addItem(mTab1)
@@ -164,9 +168,21 @@ public class MainFragment extends SingleFragment<MemberBean> {
         return new ApiCallback<MemberBean>() {
             @Override
             public void onSuccess(MemberBean model) {
-                SPUtils.put(getContext(), "member_id", model.getId());
-                if (model.getRole_id().compareTo((Integer) SPUtils.get(mContext, "role_id", 1)) > 1){
-                    SPUtils.put(getContext(), "role_id", model.getRole_id());
+                SPUtils.put(getContext(), Constants.MEMBER_ID, model.getId());
+//                if (model.getRole_id().compareTo((Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0)) > 0){
+                    SPUtils.put(getContext(), Constants.ROLE_ID, model.getRole_id());
+
+                    if (model.getRole_id() == 1) {
+                        mTab1.setText("会员区");
+                        mTab2.setText("超级会员");
+                    } else if (model.getRole_id() == 2){
+                        mTab1.setText("超级会员");
+                        mTab2.setText("黄金会员");
+                    } else if (model.getRole_id() == 3){
+                        mTab1.setText("黄金会员");
+                        mTab2.setText("铂金会员");
+                    }
+
                     if (mFragments != null) {
                         for (SupportFragment fragment : mFragments) {
                             if (fragment instanceof HomeFragment) {
@@ -176,8 +192,8 @@ public class MainFragment extends SingleFragment<MemberBean> {
                             }
                         }
                     }
-                }
-                toastShow(model.getRoleText());
+//                }
+//                toastShow(model.getRoleText());
             }
 
             @Override

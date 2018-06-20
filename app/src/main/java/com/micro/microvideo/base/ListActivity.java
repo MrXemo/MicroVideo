@@ -2,11 +2,9 @@ package com.micro.microvideo.base;
 
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-
 
 import com.micro.microvideo.R;
 import com.micro.microvideo.api.ApiServer;
@@ -16,8 +14,6 @@ import com.micro.microvideo.http.HttpListResult;
 import com.micro.microvideo.http.HttpMethods;
 import com.micro.microvideo.http.HttpResult;
 import com.micro.microvideo.http.HttpResultFunc;
-import com.micro.microvideo.http.PageBean;
-import com.micro.microvideo.util.ItemOffsetDecoration;
 import com.micro.microvideo.util.MarginAllDecoration;
 import com.micro.microvideo.util.SPUtils;
 import com.micro.microvideo.util.ZRecyclerView.ZRecyclerView;
@@ -155,7 +151,6 @@ public abstract class ListActivity<T> extends SimpleActivity {
 
                     @Override
                     public void onNext(HttpListResult<T> model) {
-                        Log.i("json","size : " + model.getData().size());
                         if (pageNumber > 1) {
                             moreDate(model);
                         } else {

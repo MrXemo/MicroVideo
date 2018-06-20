@@ -85,6 +85,44 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
                 });
     }
 
+    public<F> void request(Observable<HttpResult<F>> observable, final ApiCallback<F> apiCallback) {
+        observable
+                .map(new HttpResultFunc<F>())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<F>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addSubscription(d);
+                    }
+
+                    @Override
+                    public void onNext(F o) {
+                        apiCallback.onSuccess(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        String msg;
+                        if (e instanceof SocketTimeoutException) {
+                            msg = "网络中断，请检查您的网络状态";
+                            apiCallback.onFailure(msg);
+                        } else if (e instanceof ConnectException) {
+                            msg = "网络中断，请检查您的网络状态";
+                            apiCallback.onFailure(msg);
+                        } else {
+                            Log.e("json","发送错误",e);
+                            apiCallback.onFailure(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
 
     @Override
     public void attachView(T view) {

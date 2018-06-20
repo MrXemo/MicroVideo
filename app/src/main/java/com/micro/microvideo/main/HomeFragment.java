@@ -2,17 +2,20 @@ package com.micro.microvideo.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.ListFragment;
 import com.micro.microvideo.http.ApiListCallback;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.view.HeadBanner;
 import com.micro.microvideo.util.RxBus;
+import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -30,6 +33,7 @@ public class HomeFragment extends ListFragment<VideoBean>{
     CommonAdapter<VideoBean> adapter;
     List<VideoBean> mVideoBeans;
     private RxBus rxBus;        //    RxBus
+    private String mMemberId;
 
 
     public static HomeFragment newInstance() {
@@ -44,8 +48,7 @@ public class HomeFragment extends ListFragment<VideoBean>{
     @Override
     protected void initEventAndData(View view) {
         super.initEventAndData(view);
-
-        request(apiServer.videoList(pageNumber, 10, null, null, null, 3), new ApiListCallback<VideoBean>() {
+        request(apiServer.videoList(pageNumber, 10, null, null, null, 3, null), new ApiListCallback<VideoBean>() {
             @Override
             public void onSuccess(List<VideoBean> model) {
                 mVideoBeans = model;
@@ -64,11 +67,14 @@ public class HomeFragment extends ListFragment<VideoBean>{
     @Override
     protected void getData(int pageNumber) {
         title.setText("影片体验区");
-        requestList(apiServer.videoList(pageNumber,10,null, null, null,1));
+        mMemberId = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
+        Log.i("json", "initEventAndData: mMemberId :" + mMemberId);
+        requestList(apiServer.videoList(pageNumber,10,null, null, null,1, mMemberId));
     }
 
     public void refurbish(){
-        requestList(apiServer.videoList(pageNumber,10,null, null, null,1));
+        pageNumber = 1;
+        requestList(apiServer.videoList(1,10,null, null, null,1, mMemberId));
     }
 
     @Override

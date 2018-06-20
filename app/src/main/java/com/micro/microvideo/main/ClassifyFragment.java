@@ -8,9 +8,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.ListFragment;
 import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.util.MarginAllDecoration;
+import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -39,7 +41,8 @@ public class ClassifyFragment extends ListFragment<MicroBean>{
     @Override
     protected void getData(int pageNumber) {
         title.setText("影片分类");
-        requestList(apiServer.category(pageNumber,10,"", null));
+        Integer roleId = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
+        requestList(apiServer.category(pageNumber,10,"", null, roleId));
     }
 
     @Override

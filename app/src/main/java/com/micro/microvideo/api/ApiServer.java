@@ -27,7 +27,8 @@ public interface ApiServer {
     Observable<HttpListResult<MicroBean>> category(@Query("page") int page,
                                                    @Query("pageSize") int pageSize,
                                                    @Query("name") String name,
-                                                   @Query("type") Integer type);
+                                                   @Query("type") Integer type,
+                                                   @Query("role_id") Integer user_id);
 
     /**
      * 明星分类
@@ -46,7 +47,8 @@ public interface ApiServer {
                                                     @Query("name") String name,
                                                     @Query("cid") String cid,
                                                     @Query("sid") String sid,
-                                                    @Query("type") Integer type);
+                                                    @Query("type") Integer type,
+                                                    @Query("user_id") String role_id);
 
     /**
      * 获取视频评论

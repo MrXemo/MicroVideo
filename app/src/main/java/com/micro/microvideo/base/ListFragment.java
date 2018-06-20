@@ -1,9 +1,7 @@
 package com.micro.microvideo.base;
 
 import android.os.Handler;
-
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -18,9 +16,6 @@ import com.micro.microvideo.http.HttpListResultFunc;
 import com.micro.microvideo.http.HttpMethods;
 import com.micro.microvideo.http.HttpResult;
 import com.micro.microvideo.http.HttpResultFunc;
-import com.micro.microvideo.http.PageBean;
-import com.micro.microvideo.util.ItemOffsetDecoration;
-import com.micro.microvideo.util.MarginAllDecoration;
 import com.micro.microvideo.util.SPUtils;
 import com.micro.microvideo.util.ZRecyclerView.ZRecyclerView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -104,7 +99,6 @@ public abstract class ListFragment<T> extends SimpleFragment  {
 
     //第一页数据
     private void headData(HttpListResult<T> model){
-        Log.i("json","size : " + model.getData().size());
         totalPage = model.getTotal();
         pageNumber += 1;
         list = model.getData();
@@ -152,7 +146,6 @@ public abstract class ListFragment<T> extends SimpleFragment  {
 
                     @Override
                     public void onNext(HttpListResult<T> model) {
-                        Log.i("json","size : " + model.getData().size());
                         if (pageNumber > 1) {
                             moreDate(model);
                         } else {

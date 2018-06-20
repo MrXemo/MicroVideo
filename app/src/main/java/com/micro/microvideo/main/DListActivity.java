@@ -1,27 +1,19 @@
 package com.micro.microvideo.main;
 
 import android.content.Intent;
-import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
+import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.ListActivity;
-import com.micro.microvideo.base.ListFragment;
-import com.micro.microvideo.base.SingleActivity;
-import com.micro.microvideo.http.ApiCallback;
-import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.main.bean.VideoBean;
-import com.micro.microvideo.util.MarginAllDecoration;
-import com.micro.microvideo.util.ZRecyclerView.ZRecyclerView;
+import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,11 +32,12 @@ public class DListActivity extends ListActivity<VideoBean> {
     @Override
     protected void getData(int pageNumber) {
         title.setText("影片列表");
+
+        String member = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         if (type == 0){
-            Log.i("json", "id : " + id);
-            requestList(apiServer.videoList(pageNumber,10,"", id, null, null));
+            requestList(apiServer.videoList(pageNumber,10,"", id, null, null, member));
         } else {
-            requestList(apiServer.videoList(pageNumber,10,"", null, id, null));
+            requestList(apiServer.videoList(pageNumber,10,"", null, id, null, member));
         }
     }
 
