@@ -29,7 +29,7 @@ public class HeadBanner extends LinearLayout {
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.view_banner, this);
 
-        mBanner = (ConvenientBanner) findViewById(R.id.convenientBanner);
+//        mBanner = (ConvenientBanner) findViewById(R.id.convenientBanner);
 
 
     }

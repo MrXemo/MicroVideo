@@ -3,6 +3,7 @@ package com.micro.microvideo.main;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +14,9 @@ import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.ListFragment;
 import com.micro.microvideo.http.ApiCallback;
+import com.micro.microvideo.http.ApiListCallback;
 import com.micro.microvideo.main.bean.NoticeBean;
+import com.micro.microvideo.main.bean.RoleBean;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.util.MarginAllDecoration;
 import com.micro.microvideo.util.RxBus;
@@ -24,6 +27,8 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,6 +41,8 @@ import okhttp3.RequestBody;
 public class IntegralFragment extends ListFragment<VideoBean> {
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.toolbar_view)
+    Toolbar mToolbar;
     CommonAdapter<VideoBean> adapter;
     PayDialog mPayDialog;
     boolean isPay = false;
@@ -52,22 +59,33 @@ public class IntegralFragment extends ListFragment<VideoBean> {
 
     @Override
     protected void getData(int pageNumber) {
-        title.setText("VIP专区");
+        mToolbar.setVisibility(View.VISIBLE);
+        title.setText("发现");
         Integer role = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
         Log.i("json", "getData: role : " + role);
         mMember = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
-        mPayDialog = PayDialog.newInstance(role);
-        mPayDialog.setPayListener(new PayDialog.PayListener() {
+        request(apiServer.role(), new ApiListCallback<RoleBean>() {
             @Override
-            public void wxPayListener() {
-                pay("WX", "1");
+            public void onSuccess(List<RoleBean> model) {
+                mPayDialog = PayDialog.newInstance((ArrayList<RoleBean>) model);
+                mPayDialog.setPayListener(new PayDialog.PayListener() {
+                    @Override
+                    public void wxPayListener(BigDecimal total_fee) {
+                        pay("WX", total_fee.toString());
+                    }
+
+                    @Override
+                    public void aliPayListener(BigDecimal total_fee) {
+                        pay("ALI", total_fee.toString());
+                    }
+                });
             }
 
             @Override
-            public void aliPayListener() {
-                pay("ALI", "1");
+            public void onFailure(String msg) {
             }
         });
+
         requestList(apiServer.videoList(pageNumber,10,null, null, null,2, mMember));
     }
 
@@ -92,7 +110,11 @@ public class IntegralFragment extends ListFragment<VideoBean> {
                 holder.setOnClickListener(R.id.cover, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mPayDialog.show(getFragmentManager(), "pay");
+                        if ((Integer)SPUtils.get(mContext, Constants.ROLE_ID, 0) == 5){
+                            toastShow("您已经是最高级会员了");
+                        } else {
+                            mPayDialog.show(getFragmentManager(), "pay");
+                        }
                     }
                 });
             }

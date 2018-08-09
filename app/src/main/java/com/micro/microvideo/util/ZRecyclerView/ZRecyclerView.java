@@ -84,6 +84,14 @@ public class ZRecyclerView extends RecyclerView {
         }
     }
 
+    public void removeHeaderView(){
+        sHeaderTypes.remove(((Integer) HEADER_INIT_INDEX + 1));
+        mHeaderViews.remove(mHeaderViews.size() - 1);
+        if (mWrapAdapter != null) {
+            mWrapAdapter.notifyDataSetChanged();
+        }
+    }
+
     //根据header的ViewType判断是哪个header
     private View getHeaderViewByType(int itemType) {
         if(!isHeaderType(itemType)) {

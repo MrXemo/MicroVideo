@@ -2,6 +2,7 @@ package com.micro.microvideo.base;
 
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -60,7 +61,7 @@ public abstract class ListFragment<T> extends SimpleFragment  {
     @Override
     protected void initEventAndData(View view) {
         token = (String) SPUtils.get(mContext, Constants.TOKEN, "");
-        mRecycler.setLayoutManager(new GridLayoutManager(mContext,2));
+        mRecycler.setLayoutManager(new LinearLayoutManager(mContext));
 
         //设置上拉刷新、 下拉加载
         mRecycler.setLoadingListener(new ZRecyclerView.LoadingListener() {

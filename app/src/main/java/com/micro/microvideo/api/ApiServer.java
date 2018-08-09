@@ -5,6 +5,7 @@ import com.micro.microvideo.http.HttpResult;
 import com.micro.microvideo.main.bean.CommentBean;
 import com.micro.microvideo.main.bean.MemberBean;
 import com.micro.microvideo.main.bean.MicroBean;
+import com.micro.microvideo.main.bean.RoleBean;
 import com.micro.microvideo.main.bean.VideoBean;
 
 import io.reactivex.Observable;
@@ -73,4 +74,7 @@ public interface ApiServer {
      */
     @POST("api/pay/getPayUrl")
     Observable<HttpResult<String>> payUrl(@Body RequestBody info);
+
+    @GET("api/setmeal/list")
+    Observable<HttpListResult<RoleBean>> role();
 }

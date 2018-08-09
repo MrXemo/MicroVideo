@@ -6,6 +6,7 @@ import android.util.Log;
 import com.micro.microvideo.api.ApiServer;
 import com.micro.microvideo.http.ApiCallback;
 import com.micro.microvideo.http.ApiListCallback;
+import com.micro.microvideo.http.ApiPageCallback;
 import com.micro.microvideo.http.HttpListResult;
 import com.micro.microvideo.http.HttpListResultFunc;
 import com.micro.microvideo.http.HttpMethods;
@@ -98,6 +99,43 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
 
                     @Override
                     public void onNext(F o) {
+                        apiCallback.onSuccess(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        String msg;
+                        if (e instanceof SocketTimeoutException) {
+                            msg = "网络中断，请检查您的网络状态";
+                            apiCallback.onFailure(msg);
+                        } else if (e instanceof ConnectException) {
+                            msg = "网络中断，请检查您的网络状态";
+                            apiCallback.onFailure(msg);
+                        } else {
+                            Log.e("json","发送错误",e);
+                            apiCallback.onFailure(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public<F> void requestPage(Observable<HttpListResult<F>> observable, final ApiPageCallback<F> apiCallback) {
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpListResult<F>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addSubscription(d);
+                    }
+
+                    @Override
+                    public void onNext(HttpListResult<F> o) {
                         apiCallback.onSuccess(o);
                     }
 

@@ -2,23 +2,33 @@ package com.micro.microvideo.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Size;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
-import com.micro.microvideo.base.ListFragment;
-import com.micro.microvideo.http.ApiListCallback;
+import com.micro.microvideo.base.BaseFragment;
+import com.micro.microvideo.http.HttpListResult;
+import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.main.bean.VideoBean;
-import com.micro.microvideo.main.view.HeadBanner;
-import com.micro.microvideo.util.RxBus;
+import com.micro.microvideo.main.other.HomeContract;
+import com.micro.microvideo.main.other.HomePresenter;
+import com.micro.microvideo.main.view.ImageBannerHolderView;
 import com.micro.microvideo.util.SPUtils;
+import com.micro.microvideo.util.ZRecyclerView.ZRecyclerView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,17 +37,32 @@ import butterknife.BindView;
  * Created by William on 2018/5/30.
  */
 
-public class HomeFragment extends ListFragment<VideoBean>{
-    @BindView(R.id.title)
-    TextView title;
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
+//    @BindView(R.id.title)
+//    TextView title;
     CommonAdapter<VideoBean> adapter;
+    CommonAdapter<MicroBean> classifAdapter;
     List<VideoBean> mVideoBeans;
-    private RxBus rxBus;        //    RxBus
     private String mMemberId;
 
+    @BindView(R.id.classify_recycler)
+    RecyclerView classifyRecycler;
+    @BindView(R.id.recycler_view)
+    protected ZRecyclerView mRecycler;
+    @BindView(R.id.progress)
+    ProgressBar progress;
+//    @BindView(R.id.banner)
+//    LinearLayout banner;
+//    @BindView(R.id.convenientBanner)
+//    ConvenientBanner mBanner;
+    protected String token;
+
+    protected int pageNumber = 1;
+    protected int totalPage = 1;
+    protected List<VideoBean> list = null;
 
     public static HomeFragment newInstance() {
-        
+
         Bundle args = new Bundle();
 
         HomeFragment fragment = new HomeFragment();
@@ -46,38 +71,56 @@ public class HomeFragment extends ListFragment<VideoBean>{
     }
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_index;
+    }
+
+    @Override
     protected void initEventAndData(View view) {
-        super.initEventAndData(view);
-        request(apiServer.videoList(pageNumber, 10, null, null, null, 3, null), new ApiListCallback<VideoBean>() {
+        token = (String) SPUtils.get(mContext, Constants.TOKEN, "");
+        mRecycler.setLayoutManager(new GridLayoutManager(mContext,2));
+        classifyRecycler.setLayoutManager(new GridLayoutManager(mContext, 4));
+        mRecycler.setHasFixedSize(true);
+        classifyRecycler.setHasFixedSize(true);
+        //设置上拉刷新、 下拉加载
+        mRecycler.setLoadingListener(new ZRecyclerView.LoadingListener() {
             @Override
-            public void onSuccess(List<VideoBean> model) {
-                mVideoBeans = model;
-                HeadBanner banner = new HeadBanner(mContext,null);
-                banner.setBanner(mVideoBeans);
-                mRecycler.addHeaderView(banner);
+            public void onRefresh() {
+                pageNumber = 1;
+                getData(pageNumber);
             }
 
             @Override
-            public void onFailure(String msg) {
+            public void onLoadMore() {
+                if (totalPage >= pageNumber) {
 
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getData(pageNumber);
+                        }
+                    }, 500 );
+                } else {
+                    mRecycler.setNoMore(true);
+                }
             }
         });
-    }
 
-    @Override
-    protected void getData(int pageNumber) {
-        title.setText("影片体验区");
-        mMemberId = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
-        Log.i("json", "initEventAndData: mMemberId :" + mMemberId);
-        requestList(apiServer.videoList(pageNumber,10,null, null, null,1, mMemberId));
-    }
+        getData(pageNumber);
 
+    }
     public void refurbish(){
         pageNumber = 1;
-        requestList(apiServer.videoList(1,10,null, null, null,1, mMemberId));
+        mPresenter.videoList(pageNumber,10,null, null, null,1, mMemberId);
     }
 
-    @Override
+    protected void getData(int pageNumber) {
+//        title.setText("影片体验区");
+        mMemberId = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
+        mPresenter.videoList(pageNumber,10,null, null, null,1, mMemberId);
+        mPresenter.getCategory();
+    }
+
     protected CommonAdapter<VideoBean> setAdapter(List<VideoBean> list) {
         adapter  = new CommonAdapter<VideoBean>(mContext,R.layout.adapter_home, list) {
             @Override
@@ -95,5 +138,76 @@ public class HomeFragment extends ListFragment<VideoBean>{
             }
         };
         return adapter;
+    }
+
+    //更多数据
+    private void moreDate(HttpListResult<VideoBean> model){
+        pageNumber++;
+        list.addAll(model.getData());
+        mRecycler.loadMoreComplete();
+        adapter.notifyDataSetChanged();
+    }
+
+    //第一页数据
+    private void headData(HttpListResult<VideoBean> model){
+        totalPage = model.getTotal();
+        pageNumber += 1;
+        list = model.getData();
+        progress.setVisibility(View.GONE);
+        adapter = setAdapter(list);
+        mRecycler.setAdapter(adapter);
+        mRecycler.refreshComplete();
+        if (model.getTotal() <= 1) {
+            mRecycler.setNoMore(true);
+        } else {
+            mRecycler.setNoMore(false);
+            mRecycler.loadMoreComplete();
+        }
+    }
+
+    @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
+    public void getList(HttpListResult<VideoBean> model) {
+        if (pageNumber > 1) {
+            moreDate(model);
+        } else {
+            headData(model);
+        }
+    }
+
+    @Override
+    public void getCategory(List<MicroBean> model) {
+        final ArrayList<MicroBean> totalModel = (ArrayList<MicroBean>) model;
+        List<MicroBean> TopModel = new ArrayList<>();
+        if (model.size() > 8) {
+            TopModel = model.subList(0, 8);
+        }
+        classifAdapter  = new CommonAdapter<MicroBean>(mContext,R.layout.adapter_item, TopModel) {
+            @Override
+            protected void convert(ViewHolder holder, final MicroBean microBean, int position) {
+                holder.setText(R.id.text, microBean.getName());
+                Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
+                holder.setText(R.id.text, microBean.getName());
+                Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
+                holder.setOnClickListener(R.id.cover, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext, TotalActivity.class);
+                        intent.putParcelableArrayListExtra("category", totalModel);
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+        classifyRecycler.setAdapter(classifAdapter);
+    }
+
+    @Override
+    protected HomePresenter createPresenter() {
+        return new HomePresenter();
     }
 }

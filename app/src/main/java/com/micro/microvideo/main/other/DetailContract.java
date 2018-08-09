@@ -4,6 +4,7 @@ import com.micro.microvideo.base.BasePresenter;
 import com.micro.microvideo.base.BaseView;
 import com.micro.microvideo.main.bean.CommentBean;
 import com.micro.microvideo.main.bean.MemberBean;
+import com.micro.microvideo.main.bean.RoleBean;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface DetailContract {
 
         void openUrl(String url);
 
-        void getMember(MemberBean memberBean);
+        void getMember(List<RoleBean> memberBean);
     }
 
     interface Presenter extends BasePresenter<View>{
@@ -25,6 +26,6 @@ public interface DetailContract {
 
         void payVideo(String json);
 
-        void getRole(String memberId);
+        void getRole();
     }
 }

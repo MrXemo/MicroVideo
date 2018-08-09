@@ -11,17 +11,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.BaseActivity;
 import com.micro.microvideo.main.bean.CommentBean;
-import com.micro.microvideo.main.bean.MemberBean;
 import com.micro.microvideo.main.bean.NoticeBean;
+import com.micro.microvideo.main.bean.RoleBean;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.other.DetailContract;
 import com.micro.microvideo.main.other.DetailPresenter;
+import com.micro.microvideo.main.view.ZVideoPlayer;
 import com.micro.microvideo.util.ItemOffsetDecoration;
 import com.micro.microvideo.util.MarginAllDecoration;
 import com.micro.microvideo.util.RxBus;
@@ -32,6 +34,10 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +51,7 @@ import cn.jzvd.JZVideoPlayerStandard;
 
 public class DetailActivity extends BaseActivity<DetailPresenter> implements DetailContract.View {
 
-    private JZVideoPlayerStandard mJzVideoPlayerStandard;
+    private ZVideoPlayer mJzVideoPlayerStandard;
     private boolean isVip = false;  //是否为VIP
     private boolean isFirst = true;
 
@@ -63,6 +69,9 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     List<CommentBean> mCommentList;
     VideoBean mVideoBean;
     boolean isPay = false;
+    private TextView mTotalTime;
+    private SimpleDateFormat mFormat;
+    private boolean isDialog = false;
 
     @Override
     public void showError(String msg) {
@@ -81,7 +90,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
 
     @Override
     protected void initEventAndData() {
-
+        mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mVideoBean = getIntent().getParcelableExtra("video");
 
         if (mVideoBean == null || mVideoBean.getVideourl() == null) {
@@ -89,24 +98,12 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             finish();
         }
 
-        if ((Integer) SPUtils.get(this, Constants.ROLE_ID, 0) == 3) {
+        if ((Integer) SPUtils.get(this, Constants.ROLE_ID, 0) == 5) {
             isVip = true;
         }
         initVideo();
         initRecycler();
-        Integer role = (Integer) SPUtils.get(this, Constants.ROLE_ID, 0);
-        mPayDialog = PayDialog.newInstance(role);
-        mPayDialog.setPayListener(new PayDialog.PayListener() {
-            @Override
-            public void wxPayListener() {
-                pay("WX", "1");
-            }
-
-            @Override
-            public void aliPayListener() {
-                pay("ALI", "1");
-            }
-        });
+        mPresenter.getRole();
     }
 
     @Override
@@ -156,7 +153,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     public void initVideo() {
         try {
 
-            mJzVideoPlayerStandard = (JZVideoPlayerStandard) findViewById(R.id.videoplayer);
+            mJzVideoPlayerStandard = (ZVideoPlayer) findViewById(R.id.videoplayer);
             mJzVideoPlayerStandard.setUp(mVideoBean.getVideourl(),
                     JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, mVideoBean.getName());
         } catch (NullPointerException e) {
@@ -193,57 +190,43 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             }
         });
 
+        SeekBar seekBar = mJzVideoPlayerStandard.progressBar;
+//        mJzVideoPlayerStandard.setProgressAndText();
+        mTotalTime = mJzVideoPlayerStandard.totalTimeTextView;
         ImageView full = mJzVideoPlayerStandard.fullscreenButton;
-        full.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if (!isVip) {
+//        mCurrentTime = mJzVideoPlayerStandard.currentTimeTextView;
+
+        if (!isVip) {
+            full.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                         toastShow("非会员暂不能全屏观看");
                         return true;
                     }
-                }
-                return false;
-            }
-        });
-
-
-        SeekBar seekBar = mJzVideoPlayerStandard.progressBar;
-        seekBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!isVip) {
-                    toastShow("非会员不能快进");
-                    return true;
-                } else {
                     return false;
                 }
+            });
+            seekBar.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    toastShow("非会员不能快进");
+                    return true;
+                }
+            });
 
-            }
-        });
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (!isVip) {
-                    long second = (long) progress * mJzVideoPlayerStandard.getDuration() / 100000L % 60;
-                    Log.i("json", "second : " + second);
-                    if (second >= 58) {
-                        JZVideoPlayerStandard.goOnPlayOnPause();
+            mJzVideoPlayerStandard.setStop(new ZVideoPlayer.setStop() {
+                @Override
+                public void stop() {
+                    if (!isDialog) {
+                        isDialog = true;
                         mPayDialog.show(getSupportFragmentManager(), "pay");
                     }
                 }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+            });
+        } else {
+            mJzVideoPlayerStandard.isVIP = true;
+        }
     }
 
     @OnClick(R.id.seed_comment)
@@ -262,6 +245,10 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             protected void convert(ViewHolder holder, CommentBean microBean, int position) {
                 holder.setText(R.id.video_comment, microBean.getRemark());
                 holder.setText(R.id.name, microBean.getUsername());
+                holder.setText(R.id.distance, (int) (Math.random() * 100) + "km");
+                int l = (int) (Math.random() * 60 * 60000 * 3);
+                String l2 = mFormat.format(new Date((System.currentTimeMillis() - l)));
+                holder.setText(R.id.data, l2);
                 Glide.with(mContext).load(microBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
             }
         };
@@ -304,18 +291,25 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     protected void onResume() {
         super.onResume();
         if (isPay) {
-            Log.i("json", "onResume ");
             RxBus.getIntanceBus().post(new NoticeBean());
-            mPresenter.getRole((String) SPUtils.get(this, Constants.MEMBER_ID, ""));
-            isPay = false;
+            setResult(1);
+            finish();
         }
     }
 
     @Override
-    public void getMember(MemberBean memberBean) {
-        if (memberBean.getRole_id() == 3) {
-            isVip = true;
-            initVideo();
-        }
+    public void getMember(List<RoleBean> model) {
+        mPayDialog = PayDialog.newInstance((ArrayList<RoleBean>) model);
+        mPayDialog.setPayListener(new PayDialog.PayListener() {
+            @Override
+            public void wxPayListener(BigDecimal total_fee) {
+                pay("WX", total_fee.toString());
+            }
+
+            @Override
+            public void aliPayListener(BigDecimal total_fee) {
+                pay("ALI", total_fee.toString());
+            }
+        });
     }
 }

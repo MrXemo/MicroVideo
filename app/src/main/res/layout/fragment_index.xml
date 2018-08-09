@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/style_black"
+              android:orientation="vertical">
+
+   <!-- <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="@dimen/x38"
+                                       android:background="@color/colorPrimaryDark"
+                                       android:minHeight="@dimen/x38">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_red"
+            android:textSize="@dimen/x14"/>
+
+    </android.support.v7.widget.Toolbar>-->
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:padding="@dimen/x10"
+                android:id="@+id/classify_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/> <!--控制循环与否-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/x10"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_marginTop="@dimen/x10"
+                android:textSize="@dimen/x15"
+                android:drawableLeft="@drawable/ic_small_red"
+                android:drawablePadding="@dimen/x6"
+                android:text="热播"
+                android:textColor="@color/colorWhite"/>
+
+            <include layout="@layout/view_zrecyclerview"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

@@ -77,7 +77,7 @@ public class BottomBarTab extends FrameLayout {
         mTvTitle.setText(title);
         LinearLayout.LayoutParams paramsTv = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-        mTvTitle.setTextSize(12);
+        mTvTitle.setTextSize(13);
         mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.tab_unselect));
         mTvTitle.setLayoutParams(paramsTv);
         lLContainer.addView(mTvTitle);
@@ -107,7 +107,7 @@ public class BottomBarTab extends FrameLayout {
         super.setSelected(selected);
         if (selected) {
             mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, mIcon));
-            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_red));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.tab_unselect));
         } else {
             mImageView.setImageDrawable(ContextCompat.getDrawable(mContext, mUnIcon));
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.tab_unselect));

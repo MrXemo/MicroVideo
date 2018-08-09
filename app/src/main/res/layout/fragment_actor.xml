@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/style_black"
+              android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="@dimen/x44"
+                                       android:background="@color/colorPrimaryDark"
+                                       android:minHeight="@dimen/x44">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_gravity="center"
+            android:textColor="@color/style_gold"
+            android:textSize="@dimen/x16"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:text="推荐"
+        android:layout_marginRight="@dimen/x15"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginTop="@dimen/x15"
+        android:textSize="@dimen/x14"
+        android:textColor="@color/style_gold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:padding="@dimen/x10"
+                android:id="@+id/classify_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/x10"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_marginTop="@dimen/x10"
+                android:textSize="@dimen/x15"
+                android:drawableLeft="@drawable/ic_small_red"
+                android:drawablePadding="@dimen/x6"
+                android:text="AV女优TOP 8 "
+                android:textColor="@color/colorWhite"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:padding="@dimen/x10"
+                android:id="@+id/actor_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

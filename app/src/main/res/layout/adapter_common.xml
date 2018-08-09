@@ -3,23 +3,23 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
                 android:orientation="vertical">
+                <!--android:background="@color/colorWhite"-->
 
     <ImageView
         android:id="@+id/cover"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x150"
+        android:layout_height="@dimen/x130"
         android:scaleType="centerCrop"/>
-
+<!--
     <ImageView
         android:layout_width="@dimen/x32"
         android:layout_height="@dimen/x32"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/x59"
-        android:src="@drawable/ic_video_play"/>
+        android:src="@drawable/ic_video_play"/>-->
 
-    <TextView
+<!--    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -30,7 +30,7 @@
         android:paddingTop="@dimen/x1"
         android:text="VIP"
         android:textColor="@color/colorWhite"
-        android:textSize="@dimen/x10"/>
+        android:textSize="@dimen/x10"/>-->
 
     <TextView
         android:id="@+id/text"

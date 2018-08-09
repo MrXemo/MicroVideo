@@ -11,9 +11,10 @@
 
     <com.micro.microvideo.util.footbar.BottomBar
         android:layout_gravity="bottom"
+        android:paddingTop="@dimen/x3"
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
-        android:layout_height="@dimen/x42"/>
+        android:layout_height="@dimen/x44"/>
 
 </FrameLayout>

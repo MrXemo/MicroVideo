@@ -14,11 +14,24 @@
         android:layout_width="@dimen/x26"
         android:layout_height="@dimen/x26"/>
 
+    <TextView
+        android:text="正式会员才能观看完整视频"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <RadioGroup
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+
+        <RadioButton
+            android:id="@+id/radio_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x6"
+            android:text="包周会员￥0.01元"
+            android:textColor="@color/colorRedLight"/>
 
         <RadioButton
             android:id="@+id/radio_1"
@@ -34,11 +47,20 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/x6"
             android:checked="true"
-            android:text="包月会员￥0.02元"
+            android:text="包季会员￥0.02元"
             android:textColor="@color/color_orange"/>
 
         <RadioButton
             android:id="@+id/radio_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x6"
+            android:checked="true"
+            android:text="包年会员￥0.02元"
+            android:textColor="@color/color_orange"/>
+
+        <RadioButton
+            android:id="@+id/radio_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/x6"

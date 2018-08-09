@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#252525</color>
+    <color name="colorPrimary">#23272a</color>
+    <color name="colorPrimaryDark">#323232</color>
     <color name="colorAccent">#ab3992</color>
 
     <color name="rose_red">#DF4A67</color>
     <color name="color_red">#f21d1d</color>
+    <color name="style_gold">#b88d57</color>
     <color name="color_orange">#f2841d</color>
     <color name="colorRedLight">#fd8f8f</color>
     <color name="colorWhite">#ffffff</color>
@@ -28,6 +29,7 @@
     <color name="bg_price">#69C9F3</color>
     <color name="transparent">#00000000</color>
     <color name="transparent_black">#a0000000</color>
+    <color name="style_black">#23272a</color>
     <color name="transparent_red">#1cf55959</color>
     <color name="transparent_gray">#bae9e9e9</color>
     <color name="transparent_white">#afffffff</color>

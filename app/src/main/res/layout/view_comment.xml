@@ -3,6 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:orientation="vertical">
 
     <com.makeramen.roundedimageview.RoundedImageView
@@ -12,7 +13,7 @@
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
         android:layout_marginTop="@dimen/x13"
-        android:src="@drawable/ic_avatar"
+        tools:src="@drawable/ic_avatar"
         app:riv_corner_radius="@dimen/x35"/>
 
     <TextView
@@ -24,18 +25,19 @@
         android:layout_toRightOf="@id/avatar"
         android:drawableLeft="@drawable/ic_small_red"
         android:drawablePadding="@dimen/x4"
-        android:text="哟个火山附近撒娇"
+        tools:text="哟个火山附近撒娇"
         android:textColor="@color/colorText_t"
         android:textSize="@dimen/x10"
         android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/x20"
         android:layout_marginTop="@dimen/x16"
-        android:text="5.14km  10分钟"
+        tools:text="5.14km  10分钟"
         android:textSize="@dimen/x10"/>
 
     <TextView
@@ -48,11 +50,12 @@
         android:text="cidoafnavnoiandoifj好难施工i按哦i阿耨i啊京阿尼哦女i哦阿瑟东"/>
 
     <TextView
+        android:id="@+id/data"
         android:layout_margin="@dimen/x10"
         android:layout_below="@id/video_comment"
         android:layout_width="wrap_content"
         android:textSize="@dimen/x10"
-        android:text="2018-09-17 12:09:23"
+        tools:text="2018-09-17 12:09:23"
         android:layout_height="wrap_content"/>
 
 </RelativeLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/view_toolbar"/>
+
+    <com.gxz.PagerSlidingTabStrip
+        android:layout_marginTop="1px"
+        android:layout_marginBottom="1px"
+        android:id="@+id/order_pager_tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x43"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/x15"
+        app:pstsDividerColor="@color/colorWhite"
+        app:pstsIndicatorColor="@color/style_gold"
+        app:pstsIndicatorHeight="@dimen/x2"
+        app:pstsScaleZoomMax="0"
+        app:pstsShouldExpand="true"
+        app:pstsSmoothScrollWhenClickTab="false"
+        app:pstsTextSelectedColor="@color/colorText"
+        app:pstsUnderlineColor="@color/colorWhite"
+        app:pstsUnderlineHeight="1dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/order_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

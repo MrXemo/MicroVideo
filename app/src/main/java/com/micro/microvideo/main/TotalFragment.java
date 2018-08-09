@@ -1,51 +1,50 @@
 package com.micro.microvideo.main;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
-import com.micro.microvideo.app.Constants;
-import com.micro.microvideo.base.ListActivity;
+import com.micro.microvideo.base.ListFragment;
 import com.micro.microvideo.main.bean.VideoBean;
-import com.micro.microvideo.util.SPUtils;
+import com.micro.microvideo.util.MarginAllDecoration;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
- * Created by William on 2018/6/3.
+ * Created by William on 2018/8/9.
  */
 
-public class DListActivity extends ListActivity<VideoBean> {
-    @BindView(R.id.title)
-    TextView title;
+public class TotalFragment extends ListFragment<VideoBean> {
     CommonAdapter<VideoBean> adapter;
-    int type;
-    String id;
+    String mId;
 
-    @Override
-    protected void getData(int pageNumber) {
-        title.setText("影片列表");
+    public static TotalFragment newInstance(String id) {
 
-        String member = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
-        if (type == 0){
-            requestList(apiServer.videoList(pageNumber,10,"", id, null, null, member));
-        } else {
-            requestList(apiServer.videoList(pageNumber,10,"", null, id, null, member));
-        }
+        Bundle args = new Bundle();
+        args.putString("id", id);
+        TotalFragment fragment = new TotalFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    protected void initEventAndData() {
-        type = getIntent().getIntExtra("type", 0);
-        id = getIntent().getStringExtra("id");
-        super.initEventAndData();
+    protected void getData(int pageNumber) {
+        mId = getArguments().getString("id");
+        requestList(apiServer.videoList(pageNumber,10,"", mId, null, null, null));
+    }
+
+    @Override
+    protected void initEventAndData(View view) {
+        super.initEventAndData(view);
+        mRecycler.setLayoutManager(new GridLayoutManager(mContext, 2));
+        mRecycler.addItemDecoration(new MarginAllDecoration(8));
     }
 
     @Override
@@ -66,15 +65,5 @@ public class DListActivity extends ListActivity<VideoBean> {
             }
         };
         return adapter;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            if (resultCode  == 1){
-                finish();
-            }
-        }
     }
 }

@@ -1,5 +1,7 @@
 package com.micro.microvideo.main;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -32,13 +34,14 @@ public class MainFragment extends SingleFragment<MemberBean> {
     private final int SECOND = 1;
     private final int THIRD = 2;
     private final int FOUR = 3;
-    private final int FIVE = 4;
+//    private final int FIVE = 4;
 
     private BottomBarTab mTab1;
     private BottomBarTab mTab2;
     private BottomBarTab mTab3;
     private BottomBarTab mTab4;
-    private BottomBarTab mTab5;
+//    private BottomBarTab mTab5;
+    private String inviteId = "5";
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private RxBus rxBus;        //    RxBus
@@ -63,33 +66,33 @@ public class MainFragment extends SingleFragment<MemberBean> {
         String memberId = (String) SPUtils.get(getContext(), "member_id", "");
         if (memberId == null || memberId.equals("")) {
             Log.i("json", "member_id 等于空");
-            request(apiServer.register("3"));
+            request(apiServer.register(String.valueOf(getVersionCode(mContext))));
         } else {
             Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(), "member_id", ""));
+            request(apiServer.getInfo(memberId));
         }
 
         if (savedInstanceState == null) {
             mFragments[FIRST] = HomeFragment.newInstance();
-            mFragments[SECOND] = IntegralFragment.newInstance();
-            mFragments[THIRD] = ClassifyFragment.newInstance();
-            mFragments[FOUR] = ActorFragment.newInstance();
-            mFragments[FIVE] = MemberFragment.newInstance();
+            mFragments[SECOND] = ActorFragment.newInstance();
+//            mFragments[THIRD] = ClassifyFragment.newInstance();
+            mFragments[THIRD] = IntegralFragment.newInstance();
+            mFragments[FOUR] = MemberFragment.newInstance();
 
             loadMultipleRootFragment(R.id.fl_tab_container, FIRST,
                     mFragments[FIRST],
                     mFragments[SECOND],
                     mFragments[THIRD],
-                    mFragments[FOUR],
-                    mFragments[FIVE]);
+                    mFragments[FOUR]);
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
 
             // 这里我们需要拿到mFragments的引用,也可以通过getChildFragmentManager.getFragments()自行进行判断查找(效率更高些),用下面的方法查找更方便些
             mFragments[FIRST] = findChildFragment(HomeFragment.class);
-            mFragments[SECOND] = findChildFragment(IntegralFragment.class);
-            mFragments[THIRD] = findChildFragment(ClassifyFragment.class);
-            mFragments[FOUR] = findChildFragment(ActorFragment.class);
-            mFragments[FIVE] = findChildFragment(MemberFragment.class);
+            mFragments[SECOND] = findChildFragment(ActorFragment.class);
+//            mFragments[THIRD] = findChildFragment(ClassifyFragment.class);
+            mFragments[THIRD] = findChildFragment(IntegralFragment.class);
+            mFragments[FOUR] = findChildFragment(MemberFragment.class);
         }
         return mView;
     }
@@ -101,29 +104,40 @@ public class MainFragment extends SingleFragment<MemberBean> {
 
     @Override
     protected void initEventAndData(View view) {
-        mTab1 = new BottomBarTab(mContext, R.drawable.ic_main_home, R.drawable.ic_main_nav_home, "体验");
-        mTab2 = new BottomBarTab(mContext, R.drawable.ic_main_integral, R.drawable.ic_main_nav_integral, "会员区");
-        mTab3 = new BottomBarTab(mContext, R.drawable.ic_main_classify, R.drawable.ic_main_nav_classify, "分类");
-        mTab4= new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "艺人");
-        mTab5 = new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的");
+        mTab1 = new BottomBarTab(mContext, R.drawable.ic_main_home, R.drawable.ic_main_nav_home, "首页");
+        mTab2 = new BottomBarTab(mContext, R.drawable.ic_main_integral, R.drawable.ic_main_nav_integral, "频道");
+//        mTab3 = new BottomBarTab(mContext, R.drawable.ic_main_classify, R.drawable.ic_main_nav_classify, "分类");
+        mTab3 = new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "发现");
+        mTab4 = new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的");
 
-        Integer roleId = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
-        if (roleId == 1) {
-            mTab1.setText("会员区");
-            mTab2.setText("超级会员");
-        } else if (roleId == 2){
-            mTab1.setText("超级会员");
-            mTab2.setText("黄金会员");
-        } else if (roleId == 3){
-            mTab1.setText("黄金会员");
-            mTab2.setText("铂金会员");
-        }
+        /*Integer roleId = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
+        switch (roleId) {
+            case 1:
+                mTab1.setText("会员区");
+                mTab2.setText("超级会员");
+                break;
+            case 2:
+                mTab1.setText("超级会员");
+                mTab2.setText("黄金会员");
+                break;
+            case 3:
+                mTab1.setText("黄金会员");
+                mTab2.setText("铂金会员");
+                break;
+            case 4:
+                mTab1.setText("铂金会员 ");
+                mTab2.setText("钻石会员");
+                break;
+            case 5:
+                mTab1.setText("钻石会员");
+                mTab2.setText("尊享会员");
+                break;
+        }*/
 
         bottomBar.addItem(mTab1)
                 .addItem(mTab2)
                 .addItem(mTab3)
-                .addItem(mTab4)
-                .addItem(mTab5);
+                .addItem(mTab4);
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {
@@ -169,30 +183,41 @@ public class MainFragment extends SingleFragment<MemberBean> {
             @Override
             public void onSuccess(MemberBean model) {
                 SPUtils.put(getContext(), Constants.MEMBER_ID, model.getId());
-//                if (model.getRole_id().compareTo((Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0)) > 0){
+                if (model.getRole_id().compareTo((Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0)) != 0) {
                     SPUtils.put(getContext(), Constants.ROLE_ID, model.getRole_id());
-
-                    if (model.getRole_id() == 1) {
-                        mTab1.setText("会员区");
-                        mTab2.setText("超级会员");
-                    } else if (model.getRole_id() == 2){
-                        mTab1.setText("超级会员");
-                        mTab2.setText("黄金会员");
-                    } else if (model.getRole_id() == 3){
-                        mTab1.setText("黄金会员");
-                        mTab2.setText("铂金会员");
+                    switch (model.getRole_id()) {
+                        case 1:
+                            mTab1.setText("会员区");
+                            mTab2.setText("超级会员");
+                            break;
+                        case 2:
+                            mTab1.setText("超级会员");
+                            mTab2.setText("黄金会员");
+                            break;
+                        case 3:
+                            mTab1.setText("黄金会员");
+                            mTab2.setText("铂金会员");
+                            break;
+                        case 4:
+                            mTab1.setText("铂金会员 ");
+                            mTab2.setText("钻石会员");
+                            break;
+                        case 5:
+                            mTab1.setText("钻石会员");
+                            mTab2.setText("尊享会员");
+                            break;
                     }
 
                     if (mFragments != null) {
                         for (SupportFragment fragment : mFragments) {
                             if (fragment instanceof HomeFragment) {
-                                ((HomeFragment)fragment).refurbish();
-                            } else if (fragment instanceof IntegralFragment){
-                                ((IntegralFragment)fragment).refurbish();
+                                ((HomeFragment) fragment).refurbish();
+                            } else if (fragment instanceof IntegralFragment) {
+                                ((IntegralFragment) fragment).refurbish();
                             }
                         }
                     }
-//                }
+                }
 //                toastShow(model.getRoleText());
             }
 
@@ -201,5 +226,23 @@ public class MainFragment extends SingleFragment<MemberBean> {
 
             }
         };
+    }
+
+    /**
+     * 获取当前本地apk的版本
+     *
+     * @param mContext
+     * @return
+     */
+    public static int getVersionCode(Context mContext) {
+        int versionCode = 0;
+        try {
+            //获取软件版本号，对应AndroidManifest.xml下android:versionCode
+            versionCode = mContext.getPackageManager().
+                    getPackageInfo(mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionCode;
     }
 }

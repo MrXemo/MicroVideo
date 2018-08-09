@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/banner"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <com.bigkoo.convenientbanner.ConvenientBanner
-        android:id="@+id/convenientBanner"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/classify_recycler"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x140"
-        app:canLoop="true"/> <!--控制循环与否-->
+        android:layout_height="wrap_content"/> <!--控制循环与否-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,8 +19,9 @@
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
         android:layout_marginTop="@dimen/x10"
+        android:textSize="@dimen/x15"
         android:drawableLeft="@drawable/ic_small_red"
-        android:drawablePadding="@dimen/x4"
-        android:text="视频体验区"
-        android:textColor="@color/colorText_t"/>
+        android:drawablePadding="@dimen/x6"
+        android:text="热播"
+        android:textColor="@color/colorWhite"/>
 </LinearLayout>

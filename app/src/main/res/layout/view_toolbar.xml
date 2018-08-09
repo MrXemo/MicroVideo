@@ -2,9 +2,9 @@
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                                    android:id="@+id/toolbar"
                                    android:layout_width="match_parent"
-                                   android:layout_height="@dimen/x40"
+                                   android:layout_height="@dimen/x44"
                                    android:background="@color/colorPrimaryDark"
-                                   android:minHeight="@dimen/x40">
+                                   android:minHeight="@dimen/x44">
     <!--android:paddingTop="@dimen/status_bar_height"-->
 
     <TextView
@@ -15,7 +15,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:layout_gravity="center"
-        android:textColor="@color/color_red"
-        android:textSize="@dimen/x14"/>
+        android:textColor="@color/style_gold"
+        android:textSize="@dimen/x16"/>
 
 </android.support.v7.widget.Toolbar>

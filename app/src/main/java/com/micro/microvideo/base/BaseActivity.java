@@ -37,9 +37,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mPresenter = createPresenter();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+//        }
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         mUnBinder = ButterKnife.bind(this);
