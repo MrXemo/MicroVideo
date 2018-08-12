@@ -34,14 +34,14 @@ public class HeadBanner extends LinearLayout {
 
     }
 
-    public void setBanner(List<VideoBean> model){
+    public void setBanner(List<MicroBean> model){
         mBanner.setPages(new CBViewHolderCreator<ImageBannerHolderView>() {
             @Override
             public ImageBannerHolderView createHolder() {
                 ImageBannerHolderView view = new ImageBannerHolderView();
                 view.setOnClickListener(new ImageBannerHolderView.OnClickListener() {
                     @Override
-                    public void onClick(VideoBean bean) {
+                    public void onClick(MicroBean bean) {
                        Intent intent = new Intent(mContext, DetailActivity.class);
                        intent.putExtra("video", bean);
                         mContext.startActivity(intent);

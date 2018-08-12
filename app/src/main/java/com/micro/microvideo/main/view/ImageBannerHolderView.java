@@ -20,14 +20,14 @@ import com.micro.microvideo.main.bean.VideoBean;
  * Created by Dell on 2016/11/28.
  */
 
-public class ImageBannerHolderView implements Holder<VideoBean> {
+public class ImageBannerHolderView implements Holder<MicroBean> {
 
     private View view;
 
     private OnClickListener onClickListener;
 
     public interface OnClickListener {
-        void onClick(VideoBean bean);
+        void onClick(MicroBean bean);
     }
 
     public void setOnClickListener(OnClickListener onClickListener){
@@ -42,7 +42,7 @@ public class ImageBannerHolderView implements Holder<VideoBean> {
 
 
     @Override
-    public void UpdateUI(final Context context, final int position, final VideoBean data) {
+    public void UpdateUI(final Context context, final int position, final MicroBean data) {
 
         final ImageView imageView = (ImageView) view.findViewById(R.id.iv_item_header);
 //        TextView textView = (TextView)view.findViewById(R.id.tv_item_header);

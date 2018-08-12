@@ -56,7 +56,7 @@ public abstract class ListActivity<T> extends SimpleActivity {
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_home;
+        return R.layout.activity_home;
     }
 
     @Override

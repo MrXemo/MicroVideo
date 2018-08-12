@@ -17,21 +17,22 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by William on 2018/6/3.
  */
 
 public class DListActivity extends ListActivity<VideoBean> {
-    @BindView(R.id.title)
-    TextView title;
     CommonAdapter<VideoBean> adapter;
+    @BindView(R.id.cover)
+    ImageView cover;
     int type;
     String id;
+    String url;
 
     @Override
     protected void getData(int pageNumber) {
-        title.setText("影片列表");
 
         String member = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         if (type == 0){
@@ -43,14 +44,21 @@ public class DListActivity extends ListActivity<VideoBean> {
 
     @Override
     protected void initEventAndData() {
+        url = getIntent().getStringExtra("url");
         type = getIntent().getIntExtra("type", 0);
         id = getIntent().getStringExtra("id");
         super.initEventAndData();
+        Glide.with(mContext).load(url).into(cover);
+    }
+
+    @OnClick(R.id.action_return)
+    public void back(){
+        finish();
     }
 
     @Override
     protected CommonAdapter<VideoBean> setAdapter(List<VideoBean> list) {
-        adapter  = new CommonAdapter<VideoBean>(mContext,R.layout.adapter_common, list) {
+        adapter  = new CommonAdapter<VideoBean>(mContext,R.layout.adapter_d_list, list) {
             @Override
             protected void convert(ViewHolder holder, final VideoBean microBean, int position) {
                 holder.setText(R.id.text, microBean.getName());
