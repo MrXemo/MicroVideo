@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+                <!--android:background="@color/colorWhite"-->
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x190"
+        android:scaleType="centerCrop"/>
+<!--
+    <ImageView
+        android:layout_width="@dimen/x32"
+        android:layout_height="@dimen/x32"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/x59"
+        android:src="@drawable/ic_video_play"/>-->
+
+<!--    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@color/color_red"
+        android:paddingBottom="@dimen/x1"
+        android:paddingLeft="@dimen/x4"
+        android:paddingRight="@dimen/x4"
+        android:paddingTop="@dimen/x1"
+        android:text="VIP"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/x10"/>-->
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_marginTop="@dimen/x80"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/x40"
+        android:layout_height="@dimen/x40"
+        android:src="@color/transparent_gray"
+        app:riv_corner_radius="@dimen/x40"
+        />
+    <ImageView
+        android:layout_marginTop="@dimen/x80"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/x40"
+        android:layout_height="@dimen/x40"
+        android:src="@drawable/ic_video_play"
+        />
+
+    <TextView
+        android:id="@+id/text"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/x15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/x10"
+        android:paddingLeft="@dimen/x10"
+        android:paddingBottom="@dimen/x10"
+        android:background="@drawable/bg_adapter_integral"
+        android:maxLines="1"
+        tools:text="sdlfsdnfndfoinasoidnfL"/>
+
+    <ImageView
+        android:id="@+id/send"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/cover"
+        android:layout_marginRight="@dimen/x15"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/x10"
+        android:src="@drawable/ic_send_nopress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/download"
+        android:layout_toLeftOf="@id/send"
+        android:layout_below="@id/cover"
+        android:layout_marginRight="@dimen/x17"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/x10"
+        android:src="@drawable/ic_download_nopress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_toLeftOf="@id/download"
+        android:layout_below="@id/cover"
+        android:layout_marginRight="@dimen/x17"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/x10"
+        android:src="@drawable/ic_favor_nopress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="5.3万次播放"
+        android:textColor="@color/colorText_t"
+        android:layout_below="@id/cover"
+        android:layout_marginTop="@dimen/x13"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

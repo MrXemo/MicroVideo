@@ -11,19 +11,14 @@ public class MicroBean implements Parcelable {
     private String id;
     private String imgurl;
     private String name;
+    private String remark;
 
-    public MicroBean() {
-    }
-
-    public MicroBean(String url, String name) {
-        this.imgurl = url;
-        this.name = name;
-    }
 
     protected MicroBean(Parcel in) {
         id = in.readString();
         imgurl = in.readString();
         name = in.readString();
+        remark = in.readString();
     }
 
     public static final Creator<MicroBean> CREATOR = new Creator<MicroBean>() {
@@ -62,6 +57,14 @@ public class MicroBean implements Parcelable {
         this.name = name;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -72,5 +75,6 @@ public class MicroBean implements Parcelable {
         dest.writeString(id);
         dest.writeString(imgurl);
         dest.writeString(name);
+        dest.writeString(remark);
     }
 }

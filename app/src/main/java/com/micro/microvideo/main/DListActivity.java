@@ -10,6 +10,7 @@ import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.ListActivity;
 import com.micro.microvideo.main.bean.VideoBean;
+import com.micro.microvideo.main.view.DListHeadView;
 import com.micro.microvideo.util.SPUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -25,11 +26,12 @@ import butterknife.OnClick;
 
 public class DListActivity extends ListActivity<VideoBean> {
     CommonAdapter<VideoBean> adapter;
-    @BindView(R.id.cover)
-    ImageView cover;
     int type;
     String id;
     String url;
+    String name;
+    String remark;
+    DListHeadView mDListHeadView;
 
     @Override
     protected void getData(int pageNumber) {
@@ -47,14 +49,22 @@ public class DListActivity extends ListActivity<VideoBean> {
         url = getIntent().getStringExtra("url");
         type = getIntent().getIntExtra("type", 0);
         id = getIntent().getStringExtra("id");
+        name = getIntent().getStringExtra("name");
+        remark = getIntent().getStringExtra("remark");
+
         super.initEventAndData();
-        Glide.with(mContext).load(url).into(cover);
+
+        mDListHeadView = new DListHeadView(mContext, null);
+        mDListHeadView.setOnClickListener(new DListHeadView.OnClickListener() {
+            @Override
+            public void onClick() {
+                finish();
+            }
+        });
+        mDListHeadView.setDate(name, url, remark);
+        mRecycler.addHeaderView(mDListHeadView);
     }
 
-    @OnClick(R.id.action_return)
-    public void back(){
-        finish();
-    }
 
     @Override
     protected CommonAdapter<VideoBean> setAdapter(List<VideoBean> list) {

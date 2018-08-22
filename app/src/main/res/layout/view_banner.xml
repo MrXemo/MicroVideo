@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/banner"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -9,7 +8,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/classify_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/> <!--控制循环与否-->
+        android:layout_height="wrap_content"
+        android:padding="@dimen/x10"/> <!--控制循环与否-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,9 +19,9 @@
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
         android:layout_marginTop="@dimen/x10"
-        android:textSize="@dimen/x15"
         android:drawableLeft="@drawable/ic_small_red"
         android:drawablePadding="@dimen/x6"
         android:text="热播"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/x15"/>
 </LinearLayout>

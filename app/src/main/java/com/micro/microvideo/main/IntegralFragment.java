@@ -18,6 +18,7 @@ import com.micro.microvideo.http.ApiListCallback;
 import com.micro.microvideo.main.bean.NoticeBean;
 import com.micro.microvideo.main.bean.RoleBean;
 import com.micro.microvideo.main.bean.VideoBean;
+import com.micro.microvideo.util.ItemOffsetDecoration;
 import com.micro.microvideo.util.MarginAllDecoration;
 import com.micro.microvideo.util.RxBus;
 import com.micro.microvideo.util.SPUtils;
@@ -91,7 +92,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
 
     @Override
     protected void initEventAndData(View view) {
-        mRecycler.addItemDecoration(new MarginAllDecoration(8));
+        mRecycler.addItemDecoration(new ItemOffsetDecoration(mContext, R.dimen.x10));
         super.initEventAndData(view);
     }
 
@@ -102,7 +103,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
 
     @Override
     protected CommonAdapter<VideoBean> setAdapter(List<VideoBean> list) {
-        adapter = new CommonAdapter<VideoBean>(mContext, R.layout.adapter_common, list) {
+        adapter = new CommonAdapter<VideoBean>(mContext, R.layout.adapter_integral, list) {
             @Override
             protected void convert(ViewHolder holder, VideoBean microBean, int position) {
                 holder.setText(R.id.text, microBean.getName());

@@ -103,6 +103,8 @@ dependencies {
     compile 'me.yokeyword:fragmentation:1.1.6'
     /*     glide    */
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    /*      魅族式轮播图      */
+    compile 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
     /*    jcVideo   */
     compile 'cn.jzvd:jiaozivideoplayer:6.2.10'
     /* Android-导航栏特效，主要是导航栏字体大小和颜色的渐变特效 可以是固定的几个,可也可以是水平滚动 */

@@ -15,7 +15,7 @@
         android:layout_height="@dimen/x43"
         android:background="@color/colorWhite"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/x15"
+        android:textSize="@dimen/x14"
         app:pstsDividerColor="@color/colorWhite"
         app:pstsIndicatorColor="@color/style_gold"
         app:pstsIndicatorHeight="@dimen/x2"

@@ -7,9 +7,9 @@
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                                        android:layout_width="match_parent"
-                                       android:layout_height="@dimen/x35"
+                                       android:layout_height="@dimen/x44"
                                        android:background="@color/colorPrimaryDark"
-                                       android:minHeight="@dimen/x36">
+                                       android:minHeight="@dimen/x44">
 
         <TextView
             android:id="@+id/title"
@@ -19,8 +19,8 @@
             android:layout_gravity="center"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/color_red"
-            android:textSize="@dimen/x12"/>
+            android:textColor="@color/style_gold"
+            android:textSize="@dimen/x18"/>
 
     </android.support.v7.widget.Toolbar>
 

@@ -66,6 +66,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
         String memberId = (String) SPUtils.get(getContext(), "member_id", "");
         if (memberId == null || memberId.equals("")) {
             Log.i("json", "member_id 等于空");
+            Log.i("json", "getVersionCode(mContext) : " + getVersionCode(mContext));
             request(apiServer.register(String.valueOf(getVersionCode(mContext))));
         } else {
             Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(), "member_id", ""));
@@ -109,30 +110,6 @@ public class MainFragment extends SingleFragment<MemberBean> {
 //        mTab3 = new BottomBarTab(mContext, R.drawable.ic_main_classify, R.drawable.ic_main_nav_classify, "分类");
         mTab3 = new BottomBarTab(mContext, R.drawable.ic_main_actor, R.drawable.ic_main_nav_actor, "发现");
         mTab4 = new BottomBarTab(mContext, R.drawable.ic_main_member, R.drawable.ic_main_nav_member, "我的");
-
-        /*Integer roleId = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
-        switch (roleId) {
-            case 1:
-                mTab1.setText("会员区");
-                mTab2.setText("超级会员");
-                break;
-            case 2:
-                mTab1.setText("超级会员");
-                mTab2.setText("黄金会员");
-                break;
-            case 3:
-                mTab1.setText("黄金会员");
-                mTab2.setText("铂金会员");
-                break;
-            case 4:
-                mTab1.setText("铂金会员 ");
-                mTab2.setText("钻石会员");
-                break;
-            case 5:
-                mTab1.setText("钻石会员");
-                mTab2.setText("尊享会员");
-                break;
-        }*/
 
         bottomBar.addItem(mTab1)
                 .addItem(mTab2)
@@ -185,35 +162,11 @@ public class MainFragment extends SingleFragment<MemberBean> {
                 SPUtils.put(getContext(), Constants.MEMBER_ID, model.getId());
                 if (model.getRole_id().compareTo((Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0)) != 0) {
                     SPUtils.put(getContext(), Constants.ROLE_ID, model.getRole_id());
-                    switch (model.getRole_id()) {
-                        case 1:
-                            mTab1.setText("会员区");
-                            mTab2.setText("超级会员");
-                            break;
-                        case 2:
-                            mTab1.setText("超级会员");
-                            mTab2.setText("黄金会员");
-                            break;
-                        case 3:
-                            mTab1.setText("黄金会员");
-                            mTab2.setText("铂金会员");
-                            break;
-                        case 4:
-                            mTab1.setText("铂金会员 ");
-                            mTab2.setText("钻石会员");
-                            break;
-                        case 5:
-                            mTab1.setText("钻石会员");
-                            mTab2.setText("尊享会员");
-                            break;
-                    }
 
                     if (mFragments != null) {
                         for (SupportFragment fragment : mFragments) {
                             if (fragment instanceof HomeFragment) {
                                 ((HomeFragment) fragment).refurbish();
-                            } else if (fragment instanceof IntegralFragment) {
-                                ((IntegralFragment) fragment).refurbish();
                             }
                         }
                     }

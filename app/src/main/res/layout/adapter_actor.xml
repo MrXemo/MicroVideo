@@ -11,9 +11,9 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/cover"
-        android:layout_width="@dimen/x60"
+        android:layout_width="@dimen/x50"
         android:layout_centerHorizontal="true"
-        android:layout_height="@dimen/x60"
+        android:layout_height="@dimen/x50"
         android:scaleType="centerCrop"
         app:riv_corner_radius="@dimen/x60"/>
 

@@ -6,6 +6,7 @@ import com.micro.microvideo.http.ApiListCallback;
 import com.micro.microvideo.main.bean.CommentBean;
 import com.micro.microvideo.main.bean.MemberBean;
 import com.micro.microvideo.main.bean.RoleBean;
+import com.micro.microvideo.main.bean.VideoBean;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ public class DetailPresenter extends RxPresenter<DetailContract.View> implements
 
     @Override
     public void getComment(){
-        request(apiServer.comment(), new ApiListCallback<CommentBean>() {
+        request(apiServer.guess(), new ApiListCallback<VideoBean>() {
             @Override
-            public void onSuccess(List<CommentBean> model) {
+            public void onSuccess(List<VideoBean> model) {
                 mView.comment(model);
             }
 

@@ -1,0 +1,49 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x330"
+            android:scaleType="centerCrop"/>
+
+        <ImageView
+            android:id="@+id/action_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x15"
+            android:src="@drawable/nav_back"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x50"
+            android:layout_gravity="bottom"
+            android:src="@drawable/bg_activity_integral"/>
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/x13"
+            android:text="国内明星"
+            android:textColor="@color/style_light_gold"
+            android:textSize="@dimen/x20"
+            android:textStyle="bold"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/remark"
+        android:textColor="@color/colorTextWhite"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/x15"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

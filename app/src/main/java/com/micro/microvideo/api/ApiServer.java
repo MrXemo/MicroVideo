@@ -58,6 +58,12 @@ public interface ApiServer {
     Observable<HttpListResult<CommentBean>> comment();
 
     /**
+     * 获取猜你喜欢
+     */
+    @GET("api/video/hobbyList")
+    Observable<HttpListResult<VideoBean>> guess();
+
+    /**
      * 注册接口
      */
     @GET("api/user/add")

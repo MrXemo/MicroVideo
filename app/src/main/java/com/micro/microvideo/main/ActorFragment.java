@@ -20,7 +20,10 @@ import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.main.bean.VideoBean;
 import com.micro.microvideo.main.other.ActorContract;
 import com.micro.microvideo.main.other.ActorPresenter;
+import com.micro.microvideo.main.view.BannerViewHolder;
 import com.micro.microvideo.main.view.ImageBannerHolderView;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -42,8 +45,9 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
     RecyclerView classifyRecycler;
     @BindView(R.id.actor_recycler)
     RecyclerView actorRecycler;
-    @BindView(R.id.convenientBanner)
-    ConvenientBanner convenientBanner;
+    @BindView(R.id.banner)
+    MZBannerView mBannerView;
+    private BannerViewHolder mBannerViewHolder;
 
     public static ActorFragment newInstance() {
 
@@ -74,8 +78,10 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
                     public void onClick(View view) {
                         Intent intent = new Intent(mContext, DListActivity.class);
                         intent.putExtra("type", 1);
+                        intent.putExtra("name", microBean.getName());
                         intent.putExtra("id", microBean.getId());
                         intent.putExtra("url", microBean.getImgurl());
+                        intent.putExtra("remark", microBean.getRemark());
                         startActivity(intent);
                     }
                 });
@@ -116,7 +122,22 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
         };
         classifyRecycler.setAdapter(classifAdapter);
 
-        convenientBanner.setPages(new CBViewHolderCreator<ImageBannerHolderView>() {
+        mBannerViewHolder = new BannerViewHolder();
+        mBannerViewHolder.setOnClickListener(new BannerViewHolder.OnClickListener() {
+            @Override
+            public void onClick(MicroBean bean) {
+                Intent intent = new Intent(mContext, TotalActivity.class);
+                intent.putParcelableArrayListExtra("category", totalModel);
+                startActivity(intent);
+            }
+        });
+        mBannerView.setPages(BannerModel, new MZHolderCreator<BannerViewHolder>() {
+            @Override
+            public BannerViewHolder createViewHolder() {
+                return mBannerViewHolder;
+            }
+        });
+       /* convenientBanner.setPages(new CBViewHolderCreator<ImageBannerHolderView>() {
             @Override
             public ImageBannerHolderView createHolder() {
                 ImageBannerHolderView view = new ImageBannerHolderView();
@@ -132,7 +153,7 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
             }
         }, BannerModel)
                 .setPageIndicator(new int[]{R.drawable.dot_unselected, R.drawable.dot_selected})
-                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);*/
     }
 
     @Override
@@ -147,21 +168,33 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
 
     @Override
     protected void initEventAndData(View view) {
-        title.setText("明星分类");
+        title.setText("频道");
 
         actorRecycler.setLayoutManager(new GridLayoutManager(mContext, 4));
         classifyRecycler.setLayoutManager(new GridLayoutManager(mContext, 4));
         actorRecycler.setHasFixedSize(true);
         classifyRecycler.setHasFixedSize(true);
 
-        convenientBanner.setScrollDuration(500);
-        convenientBanner.startTurning(3000);
+       /* convenientBanner.setScrollDuration(500);
+        convenientBanner.startTurning(3000);*/
 
         mPresenter.actorList();
         mPresenter.getCategory();
     }
 
-/*    @Override
+    @Override
+    public void onPause() {
+        super.onPause();
+        mBannerView.pause();//暂停轮播
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBannerView.start();//开始轮播
+    }
+
+    /*    @Override
     protected void getData(int pageNumber) {
         title.setText("明星分类");
         requestList(apiServer.actor(pageNumber,10,""));

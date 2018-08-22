@@ -55,18 +55,22 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     private boolean isVip = false;  //是否为VIP
     private boolean isFirst = true;
 
-    @BindView(R.id.video_cover)
-    RecyclerView covers;
-    CommonAdapter<String> mAdapter;
+//    @BindView(R.id.video_cover)
+//    RecyclerView covers;
+//    CommonAdapter<String> mAdapter;
     List<String> mList;
     PayDialog mPayDialog;
 
+    @BindView(R.id.introduction)
+    TextView introduction;
+
+
     @BindView(R.id.video_comment)
     RecyclerView comment;
-    @BindView(R.id.edit_comment)
-    EditText mEditText;
-    CommonAdapter<CommentBean> adapter;
-    List<CommentBean> mCommentList;
+    /*@BindView(R.id.edit_comment)
+    EditText mEditText;*/
+    CommonAdapter<VideoBean> adapter;
+    List<VideoBean> mCommentList;
     VideoBean mVideoBean;
     boolean isPay = false;
     private TextView mTotalTime;
@@ -97,6 +101,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             toastShow("数据错误");
             finish();
         }
+        introduction.setText(mVideoBean.getName());
 
         if ((Integer) SPUtils.get(this, Constants.ROLE_ID, 0) == 5) {
             isVip = true;
@@ -128,7 +133,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     public void initRecycler() {
         mList = mVideoBean.getImgs();
 
-        covers.setLayoutManager(new GridLayoutManager(this, 3));
+/*        covers.setLayoutManager(new GridLayoutManager(this, 3));
         covers.addItemDecoration(new MarginAllDecoration(4));
         mAdapter = new CommonAdapter<String>(this, R.layout.view_cover, mList) {
             @Override
@@ -137,7 +142,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             }
         };
 
-        covers.setAdapter(mAdapter);
+        covers.setAdapter(mAdapter);*/
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setSmoothScrollbarEnabled(true);
@@ -229,27 +234,22 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         }
     }
 
-    @OnClick(R.id.seed_comment)
+    /*@OnClick(R.id.seed_comment)
     public void seedComment() {
         String comment = mEditText.getText().toString();
         mCommentList.add(new CommentBean(comment, "阿瑟瑞"));
         adapter.notifyDataSetChanged();
         mEditText.setText("");
-    }
+    }*/
 
     @Override
-    public void comment(List<CommentBean> beans) {
+    public void comment(List<VideoBean> beans) {
         mCommentList = beans;
-        adapter = new CommonAdapter<CommentBean>(this, R.layout.view_comment, mCommentList) {
+        adapter = new CommonAdapter<VideoBean>(this, R.layout.view_guess, mCommentList) {
             @Override
-            protected void convert(ViewHolder holder, CommentBean microBean, int position) {
-                holder.setText(R.id.video_comment, microBean.getRemark());
-                holder.setText(R.id.name, microBean.getUsername());
-                holder.setText(R.id.distance, (int) (Math.random() * 100) + "km");
-                int l = (int) (Math.random() * 60 * 60000 * 3);
-                String l2 = mFormat.format(new Date((System.currentTimeMillis() - l)));
-                holder.setText(R.id.data, l2);
-                Glide.with(mContext).load(microBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
+            protected void convert(ViewHolder holder, VideoBean videoBean, int position) {
+                Glide.with(mContext).load(videoBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
+                holder.setText(R.id.name, videoBean.getName());
             }
         };
         comment.setAdapter(adapter);

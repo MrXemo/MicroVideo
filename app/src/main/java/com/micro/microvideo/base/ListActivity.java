@@ -43,7 +43,7 @@ public abstract class ListActivity<T> extends SimpleActivity {
     protected ApiServer apiServer = HttpMethods.getInstance().create(ApiServer.class);
 
     @BindView(R.id.recycler_view)
-    ZRecyclerView mRecycler;
+    protected ZRecyclerView mRecycler;
     @BindView(R.id.progress)
     ProgressBar progress;
     String token;

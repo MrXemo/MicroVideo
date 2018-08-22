@@ -16,7 +16,7 @@ import cn.jzvd.JZVideoPlayerStandard;
 public class ZVideoPlayer extends JZVideoPlayerStandard {
     int second = (int) (60 * 60 * 1.5);
     String s;
-    public boolean isVIP = true;
+    public boolean isVIP = false;
 
     public ZVideoPlayer(Context context) {
         super(context);

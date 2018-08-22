@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/x130"
+        android:layout_height="@dimen/x100"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+        tools:src="@drawable/ic_error"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="@dimen/x4"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginTop="@dimen/x16"
+        android:layout_toRightOf="@id/avatar"
+        android:drawablePadding="@dimen/x4"
+        tools:text="哟个火山附近撒娇"
+        android:textColor="@color/colorText_t"
+        android:textSize="@dimen/x12"
+        android:textStyle="bold"/>
+
+
+
+    <TextView
+        android:id="@+id/data"
+        android:layout_margin="@dimen/x10"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/avatar"
+        android:layout_width="wrap_content"
+        android:textSize="@dimen/x12"
+        android:text="0.5万次播放"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

@@ -6,7 +6,8 @@
 
     <color name="rose_red">#DF4A67</color>
     <color name="color_red">#f21d1d</color>
-    <color name="style_gold">#b88d57</color>
+    <color name="style_gold">#ceb591</color>
+    <color name="style_light_gold">#edc264</color>
     <color name="color_orange">#f2841d</color>
     <color name="colorRedLight">#fd8f8f</color>
     <color name="colorWhite">#ffffff</color>
@@ -31,7 +32,7 @@
     <color name="transparent_black">#a0000000</color>
     <color name="style_black">#23272a</color>
     <color name="transparent_red">#1cf55959</color>
-    <color name="transparent_gray">#bae9e9e9</color>
+    <color name="transparent_gray">#8d5b5b5b</color>
     <color name="transparent_white">#afffffff</color>
     <color name="bg_personal">#A4E6FE</color>
     <color name="deep_transparent">#bb000000</color>
