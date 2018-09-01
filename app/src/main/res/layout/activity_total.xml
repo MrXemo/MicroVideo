@@ -20,6 +20,7 @@
         app:pstsIndicatorColor="@color/style_gold"
         app:pstsIndicatorHeight="@dimen/x2"
         app:pstsScaleZoomMax="0"
+        app:pstsTabPaddingLeftRight="@dimen/x20"
         app:pstsShouldExpand="true"
         app:pstsSmoothScrollWhenClickTab="false"
         app:pstsTextSelectedColor="@color/colorText"

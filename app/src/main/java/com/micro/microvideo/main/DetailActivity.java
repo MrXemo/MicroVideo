@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -101,7 +102,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             toastShow("数据错误");
             finish();
         }
-        introduction.setText(mVideoBean.getName());
+        introduction.setText(Html.fromHtml(mVideoBean.getRemark()));
 
         if ((Integer) SPUtils.get(this, Constants.ROLE_ID, 0) == 5) {
             isVip = true;
@@ -247,9 +248,37 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         mCommentList = beans;
         adapter = new CommonAdapter<VideoBean>(this, R.layout.view_guess, mCommentList) {
             @Override
-            protected void convert(ViewHolder holder, VideoBean videoBean, int position) {
+            protected void convert(ViewHolder holder, final VideoBean videoBean, int position) {
                 Glide.with(mContext).load(videoBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
                 holder.setText(R.id.name, videoBean.getName());
+                Log.i("json", "videoBean.getLabelTexts().size " + videoBean.getLabelTexts().size());
+                for (String s : videoBean.getLabelTexts()) {
+                    Log.i("json", "videoBean.getName() " + videoBean.getName() + "tag : "+ s);
+                }
+                switch (videoBean.getLabelTexts().size()) {
+                    case 3:
+                        holder.setText(R.id.tag3, videoBean.getLabelTexts().get(2));
+                        holder.setVisible(R.id.tag3, true);
+                        Log.i("json", "case 3:");
+                    case 2:
+                        holder.setText(R.id.tag2, videoBean.getLabelTexts().get(1));
+                        holder.setVisible(R.id.tag2, true);
+                        Log.i("json", "case 2:");
+                    case 1:
+                        holder.setText(R.id.tag1, videoBean.getLabelTexts().get(0));
+                        holder.setVisible(R.id.tag1, true);
+                        Log.i("json", "case 1:");
+                }
+
+                holder.setOnClickListener(R.id.guess, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(DetailActivity.this, DetailActivity.class);
+                        i.putExtra("video", videoBean);
+                        startActivity(i);
+                        finish();
+                    }
+                });
             }
         };
         comment.setAdapter(adapter);

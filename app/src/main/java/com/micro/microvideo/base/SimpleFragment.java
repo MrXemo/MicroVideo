@@ -125,6 +125,9 @@ public abstract class SimpleFragment extends SupportFragment {
         return toolbar;
     }
 
+    public void refurbishMember(){}
+
+
     protected abstract int getLayoutId();
 
     protected abstract void initEventAndData(View view);

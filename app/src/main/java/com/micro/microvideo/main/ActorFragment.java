@@ -194,6 +194,7 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
         mBannerView.start();//开始轮播
     }
 
+
     /*    @Override
     protected void getData(int pageNumber) {
         title.setText("明星分类");

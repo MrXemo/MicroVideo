@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
+import com.micro.microvideo.base.SimpleFragment;
 import com.micro.microvideo.base.SingleFragment;
 import com.micro.microvideo.http.ApiCallback;
 import com.micro.microvideo.main.bean.MemberBean;
@@ -45,6 +46,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private RxBus rxBus;        //    RxBus
+    private boolean isFirst = false;
 
     @BindView(R.id.bottomBar)
     BottomBar bottomBar;
@@ -67,6 +69,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
         if (memberId == null || memberId.equals("")) {
             Log.i("json", "member_id 等于空");
             Log.i("json", "getVersionCode(mContext) : " + getVersionCode(mContext));
+            isFirst = true;
             request(apiServer.register(String.valueOf(getVersionCode(mContext))));
         } else {
             Log.i("json", "member_id 不等于空" + SPUtils.get(getContext(), "member_id", ""));
@@ -74,10 +77,10 @@ public class MainFragment extends SingleFragment<MemberBean> {
         }
 
         if (savedInstanceState == null) {
-            mFragments[FIRST] = HomeFragment.newInstance();
+            mFragments[FIRST] = HomeFragment.newInstance(isFirst);
             mFragments[SECOND] = ActorFragment.newInstance();
 //            mFragments[THIRD] = ClassifyFragment.newInstance();
-            mFragments[THIRD] = IntegralFragment.newInstance();
+            mFragments[THIRD] = IntegralFragment.newInstance(isFirst);
             mFragments[FOUR] = MemberFragment.newInstance();
 
             loadMultipleRootFragment(R.id.fl_tab_container, FIRST,
@@ -167,6 +170,21 @@ public class MainFragment extends SingleFragment<MemberBean> {
                         for (SupportFragment fragment : mFragments) {
                             if (fragment instanceof HomeFragment) {
                                 ((HomeFragment) fragment).refurbish();
+                            }else if (fragment instanceof IntegralFragment){
+                                ((IntegralFragment) fragment).refurbish();
+                            }
+                        }
+                    }
+                }
+
+                if (isFirst) {
+                    Log.i("json", "============     isFirst     ==========");
+                    if (mFragments != null) {
+                        for (SupportFragment fragment : mFragments) {
+                            if (fragment instanceof HomeFragment) {
+                                ((HomeFragment) fragment).refurbish();
+                            } else if (fragment instanceof IntegralFragment){
+                                ((IntegralFragment) fragment).refurbish();
                             }
                         }
                     }

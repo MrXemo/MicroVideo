@@ -4,16 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Size;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.bigkoo.convenientbanner.ConvenientBanner;
-import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bumptech.glide.Glide;
 import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
@@ -62,10 +57,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     protected List<VideoBean> list = null;
     private ArrayList<MicroBean> mTotalModel;
 
-    public static HomeFragment newInstance() {
+    public static HomeFragment newInstance(boolean isFirst) {
 
         Bundle args = new Bundle();
-
+        args.putBoolean("is_first", isFirst);
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -105,7 +100,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
 
-        getData(pageNumber);
+        if (!getArguments().getBoolean("is_first", false)) {
+            getData(pageNumber);
+        }
+
         mHeadBanner = new HeadBanner(mContext, null);
         mHeadBanner.setOnClickListener(new ImageBannerHolderView.OnClickListener() {
             @Override
@@ -122,13 +120,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     public void refurbish() {
+        mMemberId = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         pageNumber = 1;
+        Log.i("json", "============     refurbish()     ==========  " + mMemberId);
         mPresenter.videoList(pageNumber, 10, null, null, null, 1, mMemberId);
     }
 
     protected void getData(int pageNumber) {
 //        title.setText("影片体验区");
         mMemberId = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
+        Log.i("json", "============     getData()     ==========    " + mMemberId);
         Log.i("json", "pageNumber : " + pageNumber);
         Log.i("json", "mMemberId : " + mMemberId);
         mPresenter.videoList(pageNumber, 10, null, null, null, 1, mMemberId);

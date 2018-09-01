@@ -18,6 +18,7 @@ public class VideoBean implements Parcelable {
     private String videourl;
 
     private List<String> imgs;
+    private List<String> labelTexts;
 
     protected VideoBean(Parcel in) {
         name = in.readString();
@@ -27,6 +28,7 @@ public class VideoBean implements Parcelable {
         imgurl = in.readString();
         videourl = in.readString();
         imgs = in.createStringArrayList();
+        labelTexts = in.createStringArrayList();
     }
 
     public static final Creator<VideoBean> CREATOR = new Creator<VideoBean>() {
@@ -40,6 +42,14 @@ public class VideoBean implements Parcelable {
             return new VideoBean[size];
         }
     };
+
+    public List<String> getLabelTexts() {
+        return labelTexts;
+    }
+
+    public void setLabelTexts(List<String> labelTexts) {
+        this.labelTexts = labelTexts;
+    }
 
     public String getName() {
         return name;
@@ -111,5 +121,6 @@ public class VideoBean implements Parcelable {
         parcel.writeString(imgurl);
         parcel.writeString(videourl);
         parcel.writeStringList(imgs);
+        parcel.writeStringList(labelTexts);
     }
 }

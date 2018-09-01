@@ -43,6 +43,7 @@
     <color name="blue_dark">#665bda</color>
     <color name="blue">#64b4f5</color>
     <color name="material_orange">#fd9801</color>
+    <color name="style_light_gold1">#abe9d1a4</color>
 
     <!--    底部bar   -->
     <color name="tab_unselect">#afafaf</color>

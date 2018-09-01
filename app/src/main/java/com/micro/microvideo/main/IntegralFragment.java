@@ -49,10 +49,10 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     boolean isPay = false;
     private String mMember;
 
-    public static IntegralFragment newInstance() {
+    public static IntegralFragment newInstance(boolean isFirst) {
 
         Bundle args = new Bundle();
-
+        args.putBoolean("is_first", isFirst);
         IntegralFragment fragment = new IntegralFragment();
         fragment.setArguments(args);
         return fragment;
@@ -64,6 +64,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
         title.setText("发现");
         Integer role = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
         Log.i("json", "getData: role : " + role);
+        Log.i("json", "============     getData()     ==========  " + mMember);
         mMember = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         request(apiServer.role(), new ApiListCallback<RoleBean>() {
             @Override
@@ -87,7 +88,9 @@ public class IntegralFragment extends ListFragment<VideoBean> {
             }
         });
 
-        requestList(apiServer.videoList(pageNumber,10,null, null, null,2, mMember));
+        if (!getArguments().getBoolean("is_first", false)) {
+            requestList(apiServer.videoList(pageNumber,10,null, null, null,2, mMember));
+        }
     }
 
     @Override
@@ -97,7 +100,9 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     }
 
     public void refurbish(){
+        mMember = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         pageNumber = 1;
+        Log.i("json", "============     refurbish()     ==========  " + mMember);
         requestList(apiServer.videoList(1,10,null, null, null,2, mMember));
     }
 
