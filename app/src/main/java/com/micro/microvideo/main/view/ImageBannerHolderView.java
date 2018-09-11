@@ -27,7 +27,7 @@ public class ImageBannerHolderView implements Holder<MicroBean> {
     private OnClickListener onClickListener;
 
     public interface OnClickListener {
-        void onClick(MicroBean bean);
+        void onClick(MicroBean bean,int position);
     }
 
     public void setOnClickListener(OnClickListener onClickListener){
@@ -59,7 +59,7 @@ public class ImageBannerHolderView implements Holder<MicroBean> {
             @Override
             public void onClick(View v) {
                 if (onClickListener != null) {
-                    onClickListener.onClick(data);
+                    onClickListener.onClick(data, position);
                 }
             }
         });

@@ -60,7 +60,7 @@ public class HeadBanner extends LinearLayout {
     public void setBanner(List<MicroBean> model){
         classifAdapter  = new CommonAdapter<MicroBean>(mContext,R.layout.adapter_item, model) {
             @Override
-            protected void convert(ViewHolder holder, final MicroBean microBean, int position) {
+            protected void convert(ViewHolder holder, final MicroBean microBean, final int position) {
                 holder.setText(R.id.text, microBean.getName());
                 Glide.with(mContext).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
                 holder.setText(R.id.text, microBean.getName());
@@ -69,7 +69,7 @@ public class HeadBanner extends LinearLayout {
                     @Override
                     public void onClick(View view) {
                         if (onClickListener != null) {
-                            onClickListener.onClick(microBean);
+                            onClickListener.onClick(microBean,position);
                         }
                     }
                 });

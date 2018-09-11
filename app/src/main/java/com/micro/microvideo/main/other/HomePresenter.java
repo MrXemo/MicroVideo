@@ -31,7 +31,7 @@ public class HomePresenter extends RxPresenter<HomeContract.View> implements Hom
 
     @Override
     public void getCategory() {
-        request(apiServer.category(1,7,"", null, 4), new ApiListCallback<MicroBean>() {
+        request(apiServer.category(1,7,"", 1, 4), new ApiListCallback<MicroBean>() {
             @Override
             public void onSuccess(List<MicroBean> model) {
                 mView.getCategory(model);

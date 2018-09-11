@@ -1,5 +1,6 @@
 package com.micro.microvideo.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -31,14 +32,10 @@ public class PayDialog extends DialogFragment {
 
     PayListener mPayListener;
     private ImageView mClose;
-    private RadioButton mRadioButton4;
-    private RadioButton mRadioButton3;
-    private RadioButton mRadioButton2;
-    private RadioButton mRadioButton1;
-    private RadioButton mRadioButton0;
-    private RadioGroup mGroup;
     private BigDecimal total_fee = new BigDecimal("100");
     private ArrayList<RoleBean> mRoles;
+    private TextView text;
+    private TextView price;
 
     public interface PayListener {
         void wxPayListener(BigDecimal total_fee);
@@ -67,6 +64,8 @@ public class PayDialog extends DialogFragment {
 
         TextView wechat_pay = (TextView) view.findViewById(R.id.wechat_pay);
         TextView ali_pay = (TextView) view.findViewById(R.id.ali_pay);
+        text = (TextView) view.findViewById(R.id.text);
+        price = (TextView) view.findViewById(R.id.price);
         initView(view);
 
         wechat_pay.setOnClickListener(new View.OnClickListener() {
@@ -99,82 +98,38 @@ public class PayDialog extends DialogFragment {
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView(View view){
         mRoles = (ArrayList<RoleBean>) getArguments().getSerializable("role");
 
-        mGroup = (RadioGroup) view.findViewById(R.id.radio_group);
-        mRadioButton0 = (RadioButton) view.findViewById(R.id.radio_0);
-        mRadioButton1 = (RadioButton) view.findViewById(R.id.radio_1);
-        mRadioButton2 = (RadioButton) view.findViewById(R.id.radio_2);
-        mRadioButton3 = (RadioButton) view.findViewById(R.id.radio_3);
-        mRadioButton4 = (RadioButton) view.findViewById(R.id.radio_4);
         mClose = (ImageView) view.findViewById(R.id.close);
         int role_id = (Integer)SPUtils.get(getActivity(), Constants.ROLE_ID, 0 );
 
-        if (mRoles != null && mRoles.size() >= 5) {
-            total_fee = mRoles.get(3).getOne();
-            String s0 = "包周会员￥ " + mRoles.get(0).getOne().divide(new BigDecimal("100"),
-                    2, RoundingMode.HALF_UP).toString() + "元";
-            mRadioButton0.setText(s0);
-            String s1 = "包月会员￥ " + mRoles.get(1).getOne().divide(new BigDecimal("100"),
-                    2, RoundingMode.HALF_UP).toString() + "元";
-            mRadioButton1.setText(s1);
-            String s2 = "包季会员￥ " + mRoles.get(2).getOne().divide(new BigDecimal("100"),
-                    2, RoundingMode.HALF_UP).toString() + "元";
-            mRadioButton2.setText(s2);
-            String s3 = "包年会员￥ " + mRoles.get(3).getOne().divide(new BigDecimal("100"),
-                    2, RoundingMode.HALF_UP).toString() + "元";
-            mRadioButton3.setText(s3);
-            String s4 = "永久会员￥ " + mRoles.get(4).getOne().divide(new BigDecimal("100"),
-                    2, RoundingMode.HALF_UP).toString() + "元";
-            mRadioButton4.setText(s4);
-
-            mGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    switch (radioGroup.getCheckedRadioButtonId()) {
-                        case R.id.radio_0:
-                            total_fee = mRoles.get(0).getOne();
-                            break;
-                        case R.id.radio_1:
-                            total_fee = mRoles.get(1).getOne();
-                            break;
-                        case R.id.radio_2:
-                            total_fee = mRoles.get(2).getOne();
-                            break;
-                        case R.id.radio_3:
-                            total_fee = mRoles.get(3).getOne();
-                            break;
-                        case R.id.radio_4:
-                            total_fee = mRoles.get(4).getOne();
-                            break;
-                    }
-
-                }
-            });
-        }
-
         switch (role_id) {
+            case 0:
+                text.setText("黄金会员即时优惠");
+                price.setText(mRoles.get(0).getOne().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).toString());
+                total_fee = mRoles.get(0).getOne();     //
+                break;
             case 1:
-                mRadioButton0.setVisibility(View.GONE);
+                text.setText("铂金会员即时优惠");
+                price.setText(mRoles.get(1).getOne().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).toString());
+                total_fee = mRoles.get(1).getOne();
                 break;
             case 2:
-                mRadioButton0.setVisibility(View.GONE);
-                mRadioButton1.setVisibility(View.GONE);
+                text.setText("钻石会员即时优惠");
+                price.setText(mRoles.get(2).getOne().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).toString());
+                total_fee = mRoles.get(2).getOne();
                 break;
             case 3:
-                mRadioButton0.setVisibility(View.GONE);
-                mRadioButton1.setVisibility(View.GONE);
-                mRadioButton2.setVisibility(View.GONE);
+                text.setText("包年会员即时优惠");
+                price.setText(mRoles.get(3).getOne().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).toString());
+                total_fee = mRoles.get(3).getOne();
                 break;
             case 4:
-                mRadioButton0.setVisibility(View.GONE);
-                mRadioButton1.setVisibility(View.GONE);
-                mRadioButton2.setVisibility(View.GONE);
-                mRadioButton3.setVisibility(View.GONE);
-                break;
-            case 5:
-                mGroup.setVisibility(View.GONE);
+                text.setText("永久会员即时优惠");
+                price.setText(mRoles.get(4).getOne().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).toString());
+                total_fee = mRoles.get(4).getOne();
                 break;
         }
     }

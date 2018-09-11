@@ -107,7 +107,7 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
 
         classifAdapter = new CommonAdapter<MicroBean>(mContext, R.layout.adapter_item, TopModel) {
             @Override
-            protected void convert(ViewHolder holder, final MicroBean microBean, int position) {
+            protected void convert(ViewHolder holder, final MicroBean microBean, final int position) {
                 holder.setText(R.id.text, microBean.getName());
                 Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
                 holder.setOnClickListener(R.id.cover, new View.OnClickListener() {
@@ -115,6 +115,7 @@ public class ActorFragment extends BaseFragment<ActorPresenter> implements Actor
                     public void onClick(View view) {
                         Intent intent = new Intent(mContext, TotalActivity.class);
                         intent.putParcelableArrayListExtra("category", totalModel);
+                        intent.putExtra("position", position);
                         startActivity(intent);
                     }
                 });

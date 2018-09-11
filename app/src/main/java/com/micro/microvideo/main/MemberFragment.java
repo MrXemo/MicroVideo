@@ -15,8 +15,7 @@ import butterknife.BindView;
  */
 
 public class MemberFragment extends SingleFragment{
-    @BindView(R.id.title)
-    TextView title;
+
 
     public static MemberFragment newInstance() {
         
@@ -39,6 +38,5 @@ public class MemberFragment extends SingleFragment{
 
     @Override
     protected void initEventAndData(View view) {
-        title.setText("个人中心");
     }
 }

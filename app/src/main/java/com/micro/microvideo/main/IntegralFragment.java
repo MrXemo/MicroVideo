@@ -45,8 +45,8 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     @BindView(R.id.toolbar_view)
     Toolbar mToolbar;
     CommonAdapter<VideoBean> adapter;
-    PayDialog mPayDialog;
-    boolean isPay = false;
+//    PayDialog mPayDialog;
+//    boolean isPay = false;
     private String mMember;
 
     public static IntegralFragment newInstance(boolean isFirst) {
@@ -66,7 +66,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
         Log.i("json", "getData: role : " + role);
         Log.i("json", "============     getData()     ==========  " + mMember);
         mMember = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
-        request(apiServer.role(), new ApiListCallback<RoleBean>() {
+        /*request(apiServer.role(), new ApiListCallback<RoleBean>() {
             @Override
             public void onSuccess(List<RoleBean> model) {
                 mPayDialog = PayDialog.newInstance((ArrayList<RoleBean>) model);
@@ -86,7 +86,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
             @Override
             public void onFailure(String msg) {
             }
-        });
+        });*/
 
         if (!getArguments().getBoolean("is_first", false)) {
             requestList(apiServer.videoList(pageNumber,10,null, null, null,2, mMember));
@@ -110,17 +110,15 @@ public class IntegralFragment extends ListFragment<VideoBean> {
     protected CommonAdapter<VideoBean> setAdapter(List<VideoBean> list) {
         adapter = new CommonAdapter<VideoBean>(mContext, R.layout.adapter_integral, list) {
             @Override
-            protected void convert(ViewHolder holder, VideoBean microBean, int position) {
+            protected void convert(ViewHolder holder, final VideoBean microBean, int position) {
                 holder.setText(R.id.text, microBean.getName());
                 Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
                 holder.setOnClickListener(R.id.cover, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if ((Integer)SPUtils.get(mContext, Constants.ROLE_ID, 0) == 5){
-                            toastShow("您已经是最高级会员了");
-                        } else {
-                            mPayDialog.show(getFragmentManager(), "pay");
-                        }
+                        Intent intent = new Intent(mContext, DetailActivity.class);
+                        intent.putExtra("video", microBean);
+                        startActivity(intent);
                     }
                 });
             }
@@ -145,7 +143,7 @@ public class IntegralFragment extends ListFragment<VideoBean> {
         requests(apiServer.payUrl(body), new ApiCallback<String>() {
             @Override
             public void onSuccess(String url) {
-                openUrl(url);
+//                openUrl(url);
             }
 
             @Override
@@ -155,26 +153,15 @@ public class IntegralFragment extends ListFragment<VideoBean> {
         });
     }
 
-    public void openUrl(String url) {
-        // 防止有大写
-        isPay = true;
-        url = url.replace(url.substring(0, 7), url.substring(0, 7)
-                .toLowerCase());
-        Uri uri = Uri.parse(url);
-        try {
-            Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(it);
-        } catch (Exception e) {
-        }
-    }
-
-    @Override
-    public void onSupportVisible() {
-        super.onSupportVisible();
-        if (isPay){
-            RxBus.getIntanceBus().post(new NoticeBean());
-            isPay = false;
-        }
-    }
+//    public void openUrl(String url) {
+//        url = url.replace(url.substring(0, 7), url.substring(0, 7)
+//                .toLowerCase());
+//        Uri uri = Uri.parse(url);
+//        try {
+//            Intent it = new Intent(Intent.ACTION_VIEW, uri);
+//            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(it);
+//        } catch (Exception e) {
+//        }
+//    }
 }

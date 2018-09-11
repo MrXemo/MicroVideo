@@ -15,70 +15,32 @@
         android:layout_height="@dimen/x26"/>
 
     <TextView
-        android:text="正式会员才能观看完整视频"
+        android:textSize="@dimen/x15"
+        android:textColor="@color/colorText_t"
+        android:text="正式用户才能观看完整视频"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <RadioGroup
-        android:id="@+id/radio_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-
-        <RadioButton
-            android:id="@+id/radio_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x6"
-            android:text="包周会员￥0.01元"
-            android:textColor="@color/colorRedLight"/>
-
-        <RadioButton
-            android:id="@+id/radio_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x6"
-            android:text="包月会员￥0.01元"
-            android:textColor="@color/colorRedLight"/>
-
-        <RadioButton
-            android:id="@+id/radio_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x6"
-            android:checked="true"
-            android:text="包季会员￥0.02元"
-            android:textColor="@color/color_orange"/>
-
-        <RadioButton
-            android:id="@+id/radio_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x6"
-            android:checked="true"
-            android:text="包年会员￥0.02元"
-            android:textColor="@color/color_orange"/>
-
-        <RadioButton
-            android:id="@+id/radio_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x6"
-            android:text="永久会员￥0.03元"
-            android:textColor="@color/color_red"/>
-    </RadioGroup>
-
+    <TextView
+        android:id="@+id/text"
+        android:textColor="@color/color_orange"
+        android:text="黄金会员即时优惠"
+        android:layout_marginTop="@dimen/x8"
+        android:textSize="@dimen/x16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/warn_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/x10"
-        android:text="请选择支付方式"
-        android:textColor="@color/colorText_t"
-        android:textSize="@dimen/x14"
-        android:textStyle="bold"/>
+        android:id="@+id/price"
+        android:textSize="@dimen/x18"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/x10"
+        android:text="￥38.00/月"
+        android:textStyle="bold"
+        android:textColor="@color/color_orange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
     <View
         android:layout_width="@dimen/x220"
@@ -86,13 +48,6 @@
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
         android:background="@color/colorGray"/>
-
-    <TextView
-        android:textColor="@color/color_red"
-        android:textSize="@dimen/x9"
-        android:text="因产品特殊，如微信支付出现风险提示，请放心支付"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/wechat_pay"
@@ -123,4 +78,12 @@
         android:text="支付宝支付跳转"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/x14"/>
+
+    <TextView
+        android:textColor="@color/color_red"
+        android:textSize="@dimen/x9"
+        android:layout_marginBottom="@dimen/x20"
+        android:text="因产品特殊，如微信支付出现风险提示，请放心支付"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

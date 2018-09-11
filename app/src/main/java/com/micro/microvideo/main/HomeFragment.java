@@ -107,10 +107,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mHeadBanner = new HeadBanner(mContext, null);
         mHeadBanner.setOnClickListener(new ImageBannerHolderView.OnClickListener() {
             @Override
-            public void onClick(MicroBean bean) {
+            public void onClick(MicroBean bean,int position) {
                 if (mTotalModel != null) {
                     Intent intent = new Intent(mContext, TotalActivity.class);
                     intent.putParcelableArrayListExtra("category", mTotalModel);
+                    intent.putExtra("position", position);
                     startActivity(intent);
                 }
             }
@@ -197,9 +198,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void getCategory(List<MicroBean> model) {
         mTotalModel = (ArrayList<MicroBean>) model;
-        List<MicroBean> TopModel = new ArrayList<>();
+        List<MicroBean> TopModel;
         if (model.size() > 8) {
             TopModel = model.subList(0, 8);
+        } else {
+            TopModel = model;
         }
         mHeadBanner.setBanner(TopModel);
         mRecycler.addHeaderView(mHeadBanner);

@@ -1,9 +1,9 @@
 package com.micro.microvideo.main;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
-import com.gxz.PagerSlidingTabStrip;
 import com.micro.microvideo.R;
 import com.micro.microvideo.base.SimpleActivity;
 import com.micro.microvideo.main.bean.MicroBean;
@@ -21,10 +21,11 @@ import butterknife.BindView;
 public class TotalActivity extends SimpleActivity {
     @BindView(R.id.order_viewpager)
     ViewPager mViewPager;
-    @BindView(R.id.order_pager_tab)
-    PagerSlidingTabStrip mPagerSlidingTabStrip;
+    @BindView(R.id.tab_layout)
+    TabLayout mTabLayout;
     List<Fragment> mFragments;
     List<MicroBean> mCategory;
+    int position;
     List<String> mCategoryStrs;
 
     @Override
@@ -39,13 +40,14 @@ public class TotalActivity extends SimpleActivity {
         mFragments = new ArrayList<>();
         mCategoryStrs = new ArrayList<>();
         mCategory = getIntent().getParcelableArrayListExtra("category");
+        position = getIntent().getIntExtra("position",0);
         for (MicroBean microBean : mCategory) {
             mFragments.add(TotalFragment.newInstance(microBean.getId()));
             mCategoryStrs.add(microBean.getName());
         }
-
         mViewPager.setAdapter(new CommonPagerAdapter(getSupportFragmentManager(),mFragments, mCategoryStrs));
+        mViewPager.setCurrentItem(position);
         mViewPager.setOffscreenPageLimit(mFragments.size());
-        mPagerSlidingTabStrip.setViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

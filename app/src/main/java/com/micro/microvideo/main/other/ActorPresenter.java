@@ -29,7 +29,7 @@ public class ActorPresenter extends RxPresenter<ActorContract.View> implements A
 
     @Override
     public void getCategory() {
-        request(apiServer.category(1,4,"", null, 4), new ApiListCallback<MicroBean>() {
+        request(apiServer.category(1,4,"", 2, 4), new ApiListCallback<MicroBean>() {
             @Override
             public void onSuccess(List<MicroBean> model) {
                 mView.getCategory(model);

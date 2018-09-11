@@ -50,4 +50,8 @@
         <item name="maxHeight">24dip</item>
         <item name="indicatorName">BallPulseIndicator</item>
     </style>
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/x14</item>
+    </style>
+
 </resources>
