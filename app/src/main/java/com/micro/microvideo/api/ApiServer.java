@@ -22,6 +22,12 @@ import retrofit2.http.Query;
 public interface ApiServer {
 
     /**
+     * 获取启动图
+     */
+    @GET("api/welcome")
+    Observable<HttpListResult<String>> getSplashImage();
+
+    /**
      * 视频分类
      */
     @GET("api/category/list")

@@ -5,12 +5,16 @@ import android.util.Log;
 
 import com.micro.microvideo.api.ApiServer;
 import com.micro.microvideo.http.ApiCallback;
+import com.micro.microvideo.http.ApiListCallback;
+import com.micro.microvideo.http.HttpListResult;
+import com.micro.microvideo.http.HttpListResultFunc;
 import com.micro.microvideo.http.HttpMethods;
 import com.micro.microvideo.http.HttpResult;
 import com.micro.microvideo.http.HttpResultFunc;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -33,7 +37,7 @@ public abstract class SingleActivity<T> extends SimpleActivity {
         unSubscribe();
     }
 
-    protected abstract ApiCallback<T> setApiCallback();
+    protected abstract ApiListCallback<T> setApiCallback();
 
     protected CompositeDisposable mCompositeDisposable;
 
@@ -51,21 +55,19 @@ public abstract class SingleActivity<T> extends SimpleActivity {
             mCompositeDisposable.dispose();
         }
     }
-
-    public void request(Observable<HttpResult<T>> observable) {
+    public void request(Observable<HttpListResult<T>> observable) {
         observable
-                .map(new HttpResultFunc<T>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<T>() {
+                .subscribe(new Observer<HttpListResult<T>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         addSubscription(d);
                     }
 
                     @Override
-                    public void onNext(T o) {
-                        setApiCallback().onSuccess(o);
+                    public void onNext(HttpListResult<T> o) {
+                        setApiCallback().onSuccess(o.getData());
                     }
 
                     @Override
@@ -78,7 +80,7 @@ public abstract class SingleActivity<T> extends SimpleActivity {
                             msg = "网络中断，请检查您的网络状态";
                             setApiCallback().onFailure(msg);
                         } else {
-                            Log.e("json","发送错误",e);
+                            Log.e("json", "发送错误", e);
                             setApiCallback().onFailure(e.getMessage());
                         }
                     }
