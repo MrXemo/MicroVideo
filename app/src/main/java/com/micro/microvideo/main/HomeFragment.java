@@ -124,7 +124,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mMemberId = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
         pageNumber = 1;
         Log.i("json", "============     refurbish()     ==========  " + mMemberId);
-        mPresenter.videoList(pageNumber, 10, null, null, null, 1, mMemberId);
+        mPresenter.videoList(pageNumber, 10, null, null, null, 4, mMemberId);
     }
 
     protected void getData(int pageNumber) {
@@ -133,7 +133,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         Log.i("json", "============     getData()     ==========    " + mMemberId);
         Log.i("json", "pageNumber : " + pageNumber);
         Log.i("json", "mMemberId : " + mMemberId);
-        mPresenter.videoList(pageNumber, 10, null, null, null, 1, mMemberId);
+        mPresenter.videoList(pageNumber, 10, null, null, null, 4, mMemberId);
 
     }
 
