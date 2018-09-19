@@ -15,6 +15,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.micro.microvideo.R;
 import com.micro.microvideo.app.Constants;
 import com.micro.microvideo.base.BaseActivity;
@@ -34,6 +36,7 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.ls.LSInput;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -55,6 +58,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     private ZVideoPlayer mJzVideoPlayerStandard;
     private boolean isVip = false;  //是否为VIP
     private boolean isFirst = true;
+    private boolean isHome = false;
 
 //    @BindView(R.id.video_cover)
 //    RecyclerView covers;
@@ -97,6 +101,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     protected void initEventAndData() {
         mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mVideoBean = getIntent().getParcelableExtra("video");
+        isHome = getIntent().getBooleanExtra("isHome", false);
 
         if (mVideoBean == null || mVideoBean.getVideourl() == null) {
             toastShow("数据错误");
@@ -106,6 +111,19 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
 
         if ((Integer) SPUtils.get(this, Constants.ROLE_ID, 0) == 5) {
             isVip = true;
+        } else if (isHome){
+            String json = (String) SPUtils.get(this, Constants.HOME_LIST, "");
+            Gson gson = new Gson();
+            List<String> list = gson.fromJson(json,new TypeToken<List<String>>(){}.getType());
+            Log.i("json", "HOME id : " + json);
+            if (list == null) {
+                list = new ArrayList<>();
+            }
+            if (!list.contains(mVideoBean.getId())) {
+                isVip = true;
+                list.add(mVideoBean.getId());
+                SPUtils.put(this, Constants.HOME_LIST, gson.toJson(list));
+            }
         }
         initVideo();
         initRecycler();
@@ -251,10 +269,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             protected void convert(ViewHolder holder, final VideoBean videoBean, int position) {
                 Glide.with(mContext).load(videoBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
                 holder.setText(R.id.name, videoBean.getName());
-                Log.i("json", "videoBean.getLabelTexts().size " + videoBean.getLabelTexts().size());
-                for (String s : videoBean.getLabelTexts()) {
-                    Log.i("json", "videoBean.getName() " + videoBean.getName() + "tag : "+ s);
-                }
                 switch (videoBean.getLabelTexts().size()) {
                     case 3:
                         holder.setText(R.id.tag3, videoBean.getLabelTexts().get(2));

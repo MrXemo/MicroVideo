@@ -147,6 +147,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(mContext, DetailActivity.class);
+                        intent.putExtra("isHome", true);
                         intent.putExtra("video", microBean);
                         startActivity(intent);
                     }

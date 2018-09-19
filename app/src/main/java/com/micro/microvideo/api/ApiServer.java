@@ -6,6 +6,7 @@ import com.micro.microvideo.main.bean.CommentBean;
 import com.micro.microvideo.main.bean.MemberBean;
 import com.micro.microvideo.main.bean.MicroBean;
 import com.micro.microvideo.main.bean.RoleBean;
+import com.micro.microvideo.main.bean.SplashBean;
 import com.micro.microvideo.main.bean.VideoBean;
 
 import io.reactivex.Observable;
@@ -25,7 +26,7 @@ public interface ApiServer {
      * 获取启动图
      */
     @GET("api/welcome")
-    Observable<HttpListResult<String>> getSplashImage();
+    Observable<HttpListResult<SplashBean>> getSplashImage();
 
     /**
      * 视频分类

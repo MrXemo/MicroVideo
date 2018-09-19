@@ -10,6 +10,7 @@ import java.util.List;
  */
 
 public class VideoBean implements Parcelable {
+    private String id;
     private String name;
     private String cname;
     private String quality;
@@ -21,6 +22,7 @@ public class VideoBean implements Parcelable {
     private List<String> labelTexts;
 
     protected VideoBean(Parcel in) {
+        id = in.readString();
         name = in.readString();
         cname = in.readString();
         quality = in.readString();
@@ -107,6 +109,14 @@ public class VideoBean implements Parcelable {
         this.imgs = imgs;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -114,6 +124,7 @@ public class VideoBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeString(cname);
         parcel.writeString(quality);

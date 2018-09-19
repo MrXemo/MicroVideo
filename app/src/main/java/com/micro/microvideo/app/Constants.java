@@ -6,6 +6,8 @@ public class Constants {
 
     public static final String FILE_NAME = "micro_video_sp";
     public static final String TITLE = "title";
+    public static final String URL = "url";
     public static final String MEMBER_ID = "member_id";
     public static final String ROLE_ID = "role_id";
+    public static final String HOME_LIST = "home_list";
 }
