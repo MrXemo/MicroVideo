@@ -11,10 +11,13 @@ import com.micro.microvideo.main.bean.VideoBean;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 /**
  * Created by hboxs006 on 2017/5/31.
@@ -90,4 +93,14 @@ public interface ApiServer {
 
     @GET("api/setmeal/list")
     Observable<HttpListResult<RoleBean>> role();
+
+    /**
+     * 下载app
+     *
+     * @param url
+     * @return
+     */
+    @Streaming
+    @GET
+    Observable<ResponseBody> downloadApk(@Url String url);
 }

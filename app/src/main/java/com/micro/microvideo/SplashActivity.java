@@ -1,6 +1,5 @@
 package com.micro.microvideo;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -43,13 +42,15 @@ public class SplashActivity extends SingleActivity<SplashBean> {
 
             @Override
             public void onFinish() {
-                jumpToLoginActivity();
+                jumpToLoginActivity(false, "");
             }
         };
     }
 
-    private void jumpToLoginActivity() {
+    private void jumpToLoginActivity(boolean isDown, String url) {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isDown",isDown);
+        intent.putExtra("url",url);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -81,18 +82,23 @@ public class SplashActivity extends SingleActivity<SplashBean> {
                     splash.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            jumpToWebActivity(model.get(0).getUrl());
+                            if (model.get(0).getUrl().contains(".apk")) {
+                                jumpToLoginActivity(true,model.get(0).getUrl());
+                            } else {
+                                jumpToWebActivity(model.get(0).getUrl());
+                            }
+
                         }
                     });
                     mCountDownTimer.start();
                 } else {
-                    jumpToLoginActivity();
+                    jumpToLoginActivity(false, "");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                jumpToLoginActivity();
+                jumpToLoginActivity(false, "");
             }
         };
     }

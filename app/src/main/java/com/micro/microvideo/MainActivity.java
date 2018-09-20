@@ -22,8 +22,10 @@ public class MainActivity extends SimpleActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isDown = getIntent().getBooleanExtra("isDown", false);
+        String url = getIntent().getStringExtra("url");
         if (savedInstanceState == null) {
-            loadRootFragment(R.id.container, MainFragment.newInstance());
+            loadRootFragment(R.id.container, MainFragment.newInstance(isDown, url));
         }
     }
 
