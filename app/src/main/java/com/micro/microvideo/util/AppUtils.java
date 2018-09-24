@@ -333,7 +333,7 @@ public class AppUtils {
 
         //判读版本是否在7.0以上
         if (Build.VERSION.SDK_INT  >= Build.VERSION_CODES.N) {
-            Uri apkUri = FileProvider.getUriForFile(context, "com.hboxs.rouji.fileprovider", file);
+            Uri apkUri = FileProvider.getUriForFile(context, "com.micro.microvideo.fileprovider", file);
 
             Log.e("install","apkUri7.0:"+apkUri.toString());
 

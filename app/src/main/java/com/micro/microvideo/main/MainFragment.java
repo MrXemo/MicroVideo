@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
@@ -67,6 +68,10 @@ public class MainFragment extends SingleFragment<MemberBean> {
     private BottomBarTab mTab4;
     //    private BottomBarTab mTab5;
     private String inviteId = "5";
+
+
+    private static NotificationCompat.Builder builder;
+    private static NotificationManager notificationManager;
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private RxBus rxBus;        //    RxBus
@@ -407,13 +412,5 @@ public class MainFragment extends SingleFragment<MemberBean> {
         }
     }
 
-//    private static NotificationManager notificationManager;
-//    private static final int NOTIFY_ID = 1;
-//    /**
-//     * 取消通知
-//     */
-//    private static void cancelNotification() {
-//        notificationManager.cancel(NOTIFY_ID);
-//    }
 
 }
