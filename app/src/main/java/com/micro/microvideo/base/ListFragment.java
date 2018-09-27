@@ -73,6 +73,8 @@ public abstract class ListFragment<T> extends SimpleFragment  {
 
             @Override
             public void onLoadMore() {
+                Log.i("json", "pageNumber : " + pageNumber);
+                Log.i("json", "totalPage : " + totalPage);
                 if (totalPage >= pageNumber) {
 
                     new Handler().postDelayed(new Runnable() {
@@ -100,7 +102,7 @@ public abstract class ListFragment<T> extends SimpleFragment  {
 
     //第一页数据
     private void headData(HttpListResult<T> model){
-        totalPage = model.getTotal();
+        totalPage = model.getPageNumber();
         pageNumber += 1;
         list = model.getData();
         progress.setVisibility(View.GONE);

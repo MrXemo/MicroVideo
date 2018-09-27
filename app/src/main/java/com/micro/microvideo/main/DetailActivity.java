@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -268,7 +269,9 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
             @Override
             protected void convert(ViewHolder holder, final VideoBean videoBean, int position) {
                 Glide.with(mContext).load(videoBean.getImgurl()).error(R.drawable.ic_avatar).into((ImageView) holder.getView(R.id.avatar));
+                BigDecimal math = new BigDecimal((Math.random() * 3.1) + 0.7).setScale(1,BigDecimal.ROUND_HALF_UP);
                 holder.setText(R.id.name, videoBean.getName());
+                holder.setText(R.id.data, math.toString() + "万次播放");
                 switch (videoBean.getLabelTexts().size()) {
                     case 3:
                         holder.setText(R.id.tag3, videoBean.getLabelTexts().get(2));

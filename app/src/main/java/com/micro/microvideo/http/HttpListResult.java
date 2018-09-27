@@ -1,5 +1,6 @@
 package com.micro.microvideo.http;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ public class HttpListResult<T>{
     private int code;
     private int total;
     private int pageSize;
+    private int pageNumber;
     private List<T> data;
     private String message;
 
@@ -47,6 +49,15 @@ public class HttpListResult<T>{
 
     public int getPageSize() {
         return pageSize;
+    }
+
+    public int getPageNumber() {
+        BigDecimal pageNumberi = new BigDecimal(total).divide(new BigDecimal(pageSize),BigDecimal.ROUND_UP,0);
+        return pageNumber = pageNumberi.intValue();
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public void setPageSize(int pageSize) {

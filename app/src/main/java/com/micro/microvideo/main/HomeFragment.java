@@ -167,7 +167,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     //第一页数据
     private void headData(HttpListResult<VideoBean> model) {
-        totalPage = model.getTotal();
+        totalPage = model.getPageNumber();
         pageNumber += 1;
         list = model.getData();
         progress.setVisibility(View.GONE);

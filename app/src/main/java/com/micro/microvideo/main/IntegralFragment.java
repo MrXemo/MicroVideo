@@ -64,8 +64,8 @@ public class IntegralFragment extends ListFragment<VideoBean> {
         title.setText("发现");
         Integer role = (Integer) SPUtils.get(mContext, Constants.ROLE_ID, 0);
         Log.i("json", "getData: role : " + role);
-        Log.i("json", "============     getData()     ==========  " + mMember);
         mMember = (String) SPUtils.get(mContext, Constants.MEMBER_ID, "");
+        Log.i("json", "============     getData()     ==========  " + mMember);
         /*request(apiServer.role(), new ApiListCallback<RoleBean>() {
             @Override
             public void onSuccess(List<RoleBean> model) {
@@ -112,6 +112,8 @@ public class IntegralFragment extends ListFragment<VideoBean> {
             @Override
             protected void convert(ViewHolder holder, final VideoBean microBean, int position) {
                 holder.setText(R.id.text, microBean.getName());
+                BigDecimal math = new BigDecimal((Math.random() * 3.1) + 0.7).setScale(1,BigDecimal.ROUND_HALF_UP);
+                holder.setText(R.id.data, math.toString() + "万次播放");
                 Glide.with(mActivity).load(microBean.getImgurl()).error(R.drawable.ic_default_image).into((ImageView) holder.getView(R.id.cover));
                 holder.setOnClickListener(R.id.cover, new View.OnClickListener() {
                     @Override

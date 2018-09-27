@@ -22,6 +22,8 @@ public class SplashActivity extends SingleActivity<SplashBean> {
 
     @BindView(R.id.splash)
     ImageView splash;
+    boolean isDown = false;
+    String downUrl = "";
 
     private CountDownTimer mCountDownTimer;
 
@@ -42,7 +44,7 @@ public class SplashActivity extends SingleActivity<SplashBean> {
 
             @Override
             public void onFinish() {
-                jumpToLoginActivity(false, "");
+                jumpToLoginActivity(isDown, downUrl);
             }
         };
     }
@@ -83,7 +85,10 @@ public class SplashActivity extends SingleActivity<SplashBean> {
                         @Override
                         public void onClick(View v) {
                             if (model.get(0).getUrl().contains(".apk")) {
-                                jumpToLoginActivity(true,model.get(0).getUrl());
+                                isDown = true;
+                                downUrl = model.get(0).getUrl();
+                                toastShow("开始下载APP");
+//                                jumpToLoginActivity(true,model.get(0).getUrl());
                             } else {
                                 jumpToWebActivity(model.get(0).getUrl());
                             }

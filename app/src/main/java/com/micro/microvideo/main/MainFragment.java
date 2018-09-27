@@ -1,10 +1,13 @@
 package com.micro.microvideo.main;
 
 import android.Manifest;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,6 +54,8 @@ import io.reactivex.schedulers.Schedulers;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.ResponseBody;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 /**
  * Created by hboxs006 on 2017/10/18.
  */
@@ -70,8 +75,10 @@ public class MainFragment extends SingleFragment<MemberBean> {
     private String inviteId = "5";
 
 
-    private static NotificationCompat.Builder builder;
-    private static NotificationManager notificationManager;
+    private NotificationManager mNManager;
+    Bitmap LargeBitmap = null;
+    private Notification notify1;
+    private static final int NOTIFYID_1 = 1;
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private RxBus rxBus;        //    RxBus
@@ -182,6 +189,8 @@ public class MainFragment extends SingleFragment<MemberBean> {
                 request(apiServer.getInfo(memberId));
             }
         });
+        LargeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        mNManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -275,6 +284,18 @@ public class MainFragment extends SingleFragment<MemberBean> {
     }
 
     private void downApk(String apkURL) {
+        //设置图片,通知标题,发送时间,提示方式等属性
+        Notification.Builder mBuilder = new Notification.Builder(getActivity());
+        mBuilder.setContentTitle("香蕉视频")                        //标题
+                .setContentText("正在下载APP")      //内容
+                .setTicker("正在下载")             //收到信息后状态栏显示的文字信息
+                .setWhen(System.currentTimeMillis())           //设置通知时间
+                .setSmallIcon(R.mipmap.ic_launcher_round)            //设置小图标
+                .setLargeIcon(LargeBitmap)                     //设置大图标
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)    //设置默认的三色灯与振动器
+                .setAutoCancel(false);                //设置点击后取消Notification
+        notify1 = mBuilder.build();
+        mNManager.notify(NOTIFYID_1, notify1);
         savePath = mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + File.separator + "micro";
         apiServer.downloadApk(apkURL).subscribeOn(Schedulers.io()).subscribe(new Consumer<ResponseBody>() {
             @Override
@@ -292,6 +313,7 @@ public class MainFragment extends SingleFragment<MemberBean> {
                             public void accept(Boolean aBoolean) throws Exception {
                                 if (aBoolean) {
                                     AppUtils.installApk(mContext, savePath);
+                                    mNManager.cancel(NOTIFYID_1);                          //取消Notification
                                 } else {
 
 //                                    SPUtils.put(mContext, Constants.APP_VERSION_CODE, -1);
@@ -412,5 +434,6 @@ public class MainFragment extends SingleFragment<MemberBean> {
         }
     }
 
+    //==============================================================================================
 
 }

@@ -95,6 +95,7 @@
 
     <TextView
         android:text="5.3万次播放"
+        android:id="@+id/data"
         android:textColor="@color/colorText_t"
         android:layout_below="@id/cover"
         android:layout_marginTop="@dimen/x13"
